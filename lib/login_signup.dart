@@ -9,9 +9,53 @@ class Login extends StatefulWidget
   }
 }
 
+enum FormType
+{
+  login,
+  register
+}
+
 class _LoginState extends State<Login>
 {
-   @override
+  final formKey = new GlobalKey<FormState>();
+  FormType _formType = FormType.login;
+  String _email = "";
+  String _password = "";
+ 
+  bool validate()
+  {
+    final form = formKey.currentState;
+    if(form.validate())
+    {
+      form.save();
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+  }
+
+  void moveToRegister()
+  {
+    formKey.currentState.reset();
+    setState(()
+    {
+      _formType = FormType.register;
+    });
+  }
+
+  void moveToLogin()
+  {
+    formKey.currentState.reset();
+    setState(()
+    {
+      _formType = FormType.login;
+    });
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold
     (
@@ -23,22 +67,96 @@ class _LoginState extends State<Login>
       body: new Padding
       (
         padding: EdgeInsets.all(15.0),
-        child: new Column
+        child: new Form
+        (
+          key: formKey,
+          child: new Column
         (
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>
-          [
-            new TextField
+          children: createForm() + createLogin()
+        ),
+        )
+      ),
+    );
+  }
+
+  List<Widget> createLogin()
+  {
+    if(_formType == FormType.login)
+    {
+      return
+      [
+        new RaisedButton
+        (
+          child: new Text("Login"),
+          color: Color(0XFF4FC3F7),
+          onPressed: (){print("button is pressed");},
+        ),
+
+
+        new FlatButton
+        (
+          child: new Text("Don't have an acoount? Sign up here!"),
+          onPressed: moveToRegister,
+        ),
+      ];
+    }
+    else
+    {
+      return
+      [
+        new RaisedButton
+        (
+          child: new Text("Sign Up"),
+          color: Color(0XFF4FC3F7),
+          onPressed: (){print("button is pressed");},
+        ),
+
+
+        new FlatButton
+        (
+          child: new Text("Already have an acoount? Login here!"),
+          onPressed: moveToLogin,
+        ),
+      ];
+    }
+
+  }
+
+
+  List<Widget> createForm()
+  {
+    if(_formType == FormType.login)
+    {
+      return
+      [
+         new TextFormField
             (
+              
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration
               (
                 labelText: "Enter your E-mail id here!",
                 border: OutlineInputBorder(),
               ),
+              validator:(value)
+              {
+                return value.isEmpty ? "Please enter a email adddress" : null;
+              },
+              onSaved: (value)
+              {
+                return _email = value;
+              },
             ),
-            new Padding( padding: EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0)),
-            new TextField
+
+
+            new Padding
+            (
+              padding: EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0)
+            ),
+
+
+            new TextFormField
             (
               obscureText: true,
               decoration: InputDecoration
@@ -46,23 +164,88 @@ class _LoginState extends State<Login>
                 labelText: "Enter your password here!",
                 border: OutlineInputBorder(),
               ),
+              validator:(value)
+              {
+                return value.isEmpty ? "Please enter password" : null;
+              },
+              onSaved: (value)
+              {
+                return _password = value;
+              },
             ),
-            new Padding( padding: EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0)),
-            new RaisedButton
+             new Padding
             (
-              child: new Text("Login"),
-              color: Color(0XFF4FC3F7),
-              onPressed: (){print("button is pressed");},
+             padding: EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0)
             ),
-            new FlatButton
-            (
-              child: new Text("Don't have an acoount? Sign up here!"),
-              onPressed: (){print("button is pressed");},
-            )
-          ],
+      ];
+    }
+    else
+    {
+      return
+      [
+        new TextFormField
+        (
+          decoration: InputDecoration
+          (
+            labelText: "Enter your name here!",
+            border: OutlineInputBorder(),
+          ),
         ),
-      ),
 
-    );
+        new Padding
+        (
+          padding: EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0)
+        ),
+
+        new TextFormField
+        (
+          keyboardType: TextInputType.emailAddress,
+          decoration: InputDecoration
+          (
+            labelText: "Enter your E-mail id here!",
+            border: OutlineInputBorder(),
+          ),
+          validator:(value)
+          {
+            return value.isEmpty ? "Please enter a email adddress" : null;
+          },
+          onSaved: (value)
+          {
+            return _email = value;
+          },
+          ),
+
+
+          new Padding
+          (
+            padding: EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0)
+          ),
+
+
+          new TextFormField
+          (
+            obscureText: true,
+            decoration: InputDecoration
+            (
+              labelText: "Enter your password here!",
+              border: OutlineInputBorder(),
+            ),
+            validator:(value)
+            {
+              return value.isEmpty ? "Please enter password" : null;
+            },
+            onSaved: (value)
+            {
+              return _password = value;
+            },
+          ),
+
+
+          new Padding
+          (
+           padding: EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0)
+          ),
+      ];
+    }
   }
 }

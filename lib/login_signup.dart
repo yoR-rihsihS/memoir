@@ -136,7 +136,7 @@ class _LoginState extends State<Login>
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration
               (
-                labelText: "Enter your E-mail id here!",
+                labelText: "E-mail",
                 border: OutlineInputBorder(),
               ),
               validator:(value)
@@ -161,7 +161,7 @@ class _LoginState extends State<Login>
               obscureText: true,
               decoration: InputDecoration
               (
-                labelText: "Enter your password here!",
+                labelText: "Password",
                 border: OutlineInputBorder(),
               ),
               validator:(value)
@@ -187,7 +187,7 @@ class _LoginState extends State<Login>
         (
           decoration: InputDecoration
           (
-            labelText: "Enter your name here!",
+            labelText: "Name",
             border: OutlineInputBorder(),
           ),
         ),
@@ -202,7 +202,7 @@ class _LoginState extends State<Login>
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration
           (
-            labelText: "Enter your E-mail id here!",
+            labelText: "E-mail",
             border: OutlineInputBorder(),
           ),
           validator:(value)
@@ -227,7 +227,7 @@ class _LoginState extends State<Login>
             obscureText: true,
             decoration: InputDecoration
             (
-              labelText: "Enter your password here!",
+              labelText: "Password",
               border: OutlineInputBorder(),
             ),
             validator:(value)

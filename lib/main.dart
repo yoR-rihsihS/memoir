@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:memoir/home_page.dart';
 import 'login_signup.dart';
 
 void main() => runApp(MyApp());
@@ -10,7 +11,7 @@ class MyApp extends StatelessWidget
     return new MaterialApp
     (
       title: "Memoir",
-      home: Login(),
+      home: HomePage(),
     );
   }
 }

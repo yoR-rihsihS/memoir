@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:memoir/authentication.dart';
 
 
 class Login extends StatefulWidget
 {
+  Login({
+    this.auth,
+    this.onSignedIn,
+  });
+  final AuthImplementation auth;
+  final VoidCallback onSignedIn;
+
   State<StatefulWidget> createState()
   {
     return _LoginState();
   }
+
 }
 
 enum FormType
@@ -21,8 +30,9 @@ class _LoginState extends State<Login>
   FormType _formType = FormType.login;
   String _email = "";
   String _password = "";
+  String userId = "";
  
-  bool validate()
+  bool validateAndSave()
   {
     final form = formKey.currentState;
     if(form.validate())
@@ -54,6 +64,32 @@ class _LoginState extends State<Login>
     });
   }
 
+  void validateAndSubmit() async
+  {
+    if(validateAndSave())
+    {
+      try
+      {
+        if(_formType == FormType.login)
+        {
+          String userId = await widget.auth.signIn(_email, _password);
+          print(userId);
+        }
+        else
+        {
+          String userId = await widget.auth.signUp(_email, _password);
+          print(userId);
+        }
+
+        widget.onSignedIn();
+      }
+      catch(e)
+      {
+        print("Error =" + e.toString());
+      }
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -73,14 +109,14 @@ class _LoginState extends State<Login>
           child: new Column
         (
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: createForm() + createLogin()
+          children: createForm() + createButton()
         ),
         )
       ),
     );
   }
 
-  List<Widget> createLogin()
+  List<Widget> createButton()
   {
     if(_formType == FormType.login)
     {
@@ -90,7 +126,7 @@ class _LoginState extends State<Login>
         (
           child: new Text("Login"),
           color: Color(0XFF4FC3F7),
-          onPressed: (){print("button is pressed");},
+          onPressed: validateAndSubmit,
         ),
 
 
@@ -109,7 +145,7 @@ class _LoginState extends State<Login>
         (
           child: new Text("Sign Up"),
           color: Color(0XFF4FC3F7),
-          onPressed: (){print("button is pressed");},
+          onPressed: validateAndSubmit,
         ),
 
 

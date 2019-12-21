@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:memoir/home_page.dart';
-import 'login_signup.dart';
+import 'mapping.dart';
+import 'authentication.dart';
 
 void main() => runApp(MyApp());
 
@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget
     return new MaterialApp
     (
       title: "Memoir",
-      home: HomePage(),
+      home: MappingPage(auth: Auth(),),
     );
   }
 }

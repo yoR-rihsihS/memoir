@@ -26,6 +26,7 @@ enum FormType
 
 class _LoginState extends State<Login>
 {
+  // final _scaffoldKey = new GlobalKey<ScaffoldState>();
   final formKey = new GlobalKey<FormState>();
   FormType _formType = FormType.login;
   String _email = "";
@@ -73,12 +74,19 @@ class _LoginState extends State<Login>
         if(_formType == FormType.login)
         {
           String userId = await widget.auth.signIn(_email, _password);
+          // final snackBar = SnackBar(content: Text('You have been logged in sucessfully'), duration: Duration(seconds: 3),);
+          // _scaffoldKey.currentState.showSnackBar(snackBar);
           print(userId);
         }
         else
         {
           String userId = await widget.auth.signUp(_email, _password);
           print(userId);
+          // Scaffold.of(context).showSnackBar(
+          // SnackBar(
+          //   content: Text('You have signed up sucessfully'),
+          //   duration: Duration(seconds: 3),
+          // ));
         }
 
         widget.onSignedIn();
@@ -95,6 +103,7 @@ class _LoginState extends State<Login>
   Widget build(BuildContext context) {
     return Scaffold
     (
+      // key: _scaffoldKey,
       appBar: new AppBar
       (
         centerTitle: true,

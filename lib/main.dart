@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'mapping.dart';
 import 'authentication.dart';
 
-void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget
+void main() => runApp(Memoir());
+
+class Memoir extends StatelessWidget
 {
   @override
   Widget build(BuildContext context) {

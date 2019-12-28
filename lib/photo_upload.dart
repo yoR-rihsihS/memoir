@@ -30,7 +30,7 @@ class _UploadPhotoState extends State<UploadPhoto>
   
   Future selectImage() async
   {
-    var tempImage = await ImagePicker.pickImage(source: ImageSource.gallery, maxHeight: 360.0, maxWidth: 240.0);
+    var tempImage = await ImagePicker.pickImage(source: ImageSource.gallery);
 
     setState(() {
       sampleImage = tempImage;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memoir/login_signup.dart';
+import 'package:memoir/verification.dart';
 import 'home_page.dart';
 import 'authentication.dart';
 
@@ -29,38 +30,62 @@ enum AuthStatus
 class _MappingPageState extends State<MappingPage>
 {
   AuthStatus authStatus = AuthStatus.notSignedIn;
+  
 
   @override
   void initState() 
   {
     super.initState();
 
-    widget.auth.isVerified().then((onValue){
-      if(onValue)
+    widget.auth.getCurrentUser().then((firebaseUserId)
+    {
+      widget.auth.isVerified().then((onValue)
       {
-        authStatus = AuthStatus.notVerified;
-      }
-      else
-      {
-      widget.auth.getCurrentUser().then((firebaseUserId)
-      {
-        setState(() {
+        if(onValue)
+        {
+          setState(() {
+          authStatus = AuthStatus.signedIn;
+          });
+        }
+        else
+        {
+          setState(() {
           authStatus = firebaseUserId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
-        });
+          });
+        }
       });
-      }
-    });
+    });    
   }
 
   void _signedIn()
   {
+    widget.auth.isVerified().then((onValue)
+    {
+      if(onValue)
+      {
+        setState(() {
+        authStatus = AuthStatus.signedIn;
+        });
+      }
+      else
+      {
+        setState(() {
+        authStatus = AuthStatus.notVerified;
+        });
+      }
+    });
+    
+  }
+
+  
+  void _signedOut()
+  {
     setState(() {
-      authStatus = AuthStatus.signedIn;
+      authStatus = AuthStatus.notSignedIn;
     });
   }
 
-
-  void _signedOut()
+  void _verification()
   {
     setState(() {
       authStatus = AuthStatus.notSignedIn;
@@ -84,8 +109,11 @@ class _MappingPageState extends State<MappingPage>
       );
       
       case AuthStatus.notVerified:
-      return null;
+      return new VerificationScreen(
+        auth: widget.auth,
+        onVerification: _verification,
+      );
     }
-    return null;
+    return new Container();
   }
 }

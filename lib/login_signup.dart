@@ -21,7 +21,8 @@ class Login extends StatefulWidget
 enum FormType
 {
   login,
-  register
+  register,
+  forgotPass,
 }
 
 class _LoginState extends State<Login>
@@ -66,6 +67,15 @@ class _LoginState extends State<Login>
     });
   }
 
+  void moveToForgotPass()
+  {
+    formKey.currentState.reset();
+    setState(()
+    {
+      _formType = FormType.forgotPass;
+    });
+  }
+
   void validateAndSubmit() async
   {
     if(validateAndSave())
@@ -77,10 +87,17 @@ class _LoginState extends State<Login>
           String userId = await widget.auth.signIn(_email, _password);
           print(userId);
         }
-        else
+        else if(_formType == FormType.register)
         {
           String userId = await widget.auth.signUp(_email, _password, _name, _dateOfBirth);
           print(userId);
+        }
+        else
+        {
+          widget.auth.resetPassword(_email).whenComplete(()
+          {
+            moveToLogin();
+          });
         }
 
         widget.onSignedIn();
@@ -137,9 +154,15 @@ class _LoginState extends State<Login>
           child: new Text("Don't have an acoount? Sign up here!"),
           onPressed: moveToRegister,
         ),
+
+         new FlatButton
+        (
+          child: new Text("Forgot Password? Reset Password here!"),
+          onPressed: moveToForgotPass,
+        ),
       ];
     }
-    else
+    else if(_formType == FormType.register)
     {
       return
       [
@@ -158,7 +181,31 @@ class _LoginState extends State<Login>
         ),
       ];
     }
+    else
+    {
+      return 
+      [
+        new RaisedButton
+        (
+          child: new Text("Reset Password"),
+          color: Color(0XFF4FC3F7),
+          onPressed: validateAndSubmit,
+        ),
 
+
+        new FlatButton
+        (
+          child: new Text("Login here"),
+          onPressed: moveToLogin,
+        ),
+
+         new FlatButton
+        (
+          child: new Text("Create a new account here!"),
+          onPressed: moveToRegister,
+        ),
+      ];
+    }
   }
 
 
@@ -168,58 +215,58 @@ class _LoginState extends State<Login>
     {
       return
       [
-         new TextFormField
-            (
-              
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration
-              (
-                prefixIcon: new Icon(Icons.mail_outline),
-                labelText: "E-mail",
-                border: OutlineInputBorder(),
-              ),
-              validator:(value)
-              {
-                return value.isEmpty ? "Please enter a email adddress" : null;
-              },
-              onSaved: (value)
-              {
-                return _email = value.trim();
-              },
-            ),
+        new TextFormField
+        (
+          
+          keyboardType: TextInputType.emailAddress,
+          decoration: InputDecoration
+          (
+            prefixIcon: new Icon(Icons.mail_outline),
+            labelText: "E-mail",
+            border: OutlineInputBorder(),
+          ),
+          validator:(value)
+          {
+            return value.isEmpty ? "Please enter a email adddress" : null;
+          },
+          onSaved: (value)
+          {
+            return _email = value.trim();
+          },
+        ),
 
 
-            new Padding
-            (
-              padding: EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0)
-            ),
+        new Padding
+        (
+          padding: EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0)
+        ),
 
 
-            new TextFormField
-            (
-              obscureText: true,
-              decoration: InputDecoration
-              (
-                prefixIcon: new Icon(Icons.lock_outline),
-                labelText: "Password",
-                border: OutlineInputBorder(),
-              ),
-              validator:(value)
-              {
-                return value.isEmpty ? "Please enter password" : null;
-              },
-              onSaved: (value)
-              {
-                return _password = value.trim();
-              },
-            ),
-             new Padding
-            (
-             padding: EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0)
-            ),
+        new TextFormField
+        (
+          obscureText: true,
+          decoration: InputDecoration
+          (
+            prefixIcon: new Icon(Icons.lock_outline),
+            labelText: "Password",
+            border: OutlineInputBorder(),
+          ),
+          validator:(value)
+          {
+            return value.isEmpty ? "Please enter password" : null;
+          },
+          onSaved: (value)
+          {
+            return _password = value.trim();
+          },
+        ),
+          new Padding
+        (
+          padding: EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0)
+        ),
       ];
     }
-    else
+    else if (_formType == FormType.register)
     {
       return
       [
@@ -322,6 +369,32 @@ class _LoginState extends State<Login>
           (
            padding: EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0)
           ),
+      ];
+    }
+    else
+    {
+      return
+      [
+        new TextFormField
+        (
+          
+          keyboardType: TextInputType.emailAddress,
+          decoration: InputDecoration
+          (
+            prefixIcon: new Icon(Icons.mail_outline),
+            labelText: "E-mail",
+            border: OutlineInputBorder(),
+          ),
+          validator:(value)
+          {
+            return value.isEmpty ? "Please enter a email adddress" : null;
+          },
+          onSaved: (value)
+          {
+            return _email = value.trim();
+          },
+        ),
+
       ];
     }
   }

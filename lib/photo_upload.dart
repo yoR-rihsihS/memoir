@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'home_page.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
@@ -10,6 +9,10 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 class UploadPhoto extends StatefulWidget
 {
+  final String name;
+
+  UploadPhoto({this.name});
+
   @override
   State<StatefulWidget> createState() {
     return _UploadPhotoState();
@@ -22,6 +25,7 @@ class _UploadPhotoState extends State<UploadPhoto>
   File sampleImage;
   String _description;
   String _url;
+  
   final formKey = new GlobalKey<FormState>();
   
   Future selectImage() async
@@ -71,8 +75,8 @@ class _UploadPhotoState extends State<UploadPhoto>
   void saveToDatabase(_url)
   {
     var dbTimeKey = new DateTime.now();
-    var formatDate = new DateFormat('MMM, d, yyyy');
-    var formatTime = new DateFormat('EEEE, hh:mm aaa');
+    var formatDate = new DateFormat('d, M, y');
+    var formatTime = new DateFormat('H:m');
 
     String date = formatDate.format(dbTimeKey);
     String time = formatTime.format(dbTimeKey);
@@ -85,6 +89,7 @@ class _UploadPhotoState extends State<UploadPhoto>
       "description" : _description,
       "date" : date,
       "time" : time,
+      "name" : widget.name,
     };
 
     ref.child("Posts").push().set(data);
@@ -92,7 +97,6 @@ class _UploadPhotoState extends State<UploadPhoto>
 
   void goToHomePage()
   {
-    
     Navigator.pop(context);
   }
 

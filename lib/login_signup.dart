@@ -26,12 +26,13 @@ enum FormType
 
 class _LoginState extends State<Login>
 {
-  // final _scaffoldKey = new GlobalKey<ScaffoldState>();
   final formKey = new GlobalKey<FormState>();
   FormType _formType = FormType.login;
   String _email = "";
   String _password = "";
   String userId = "";
+  String _name = "";
+  String _dateOfBirth = "";
  
   bool validateAndSave()
   {
@@ -74,19 +75,12 @@ class _LoginState extends State<Login>
         if(_formType == FormType.login)
         {
           String userId = await widget.auth.signIn(_email, _password);
-          // final snackBar = SnackBar(content: Text('You have been logged in sucessfully'), duration: Duration(seconds: 3),);
-          // _scaffoldKey.currentState.showSnackBar(snackBar);
           print(userId);
         }
         else
         {
-          String userId = await widget.auth.signUp(_email, _password);
+          String userId = await widget.auth.signUp(_email, _password, _name, _dateOfBirth);
           print(userId);
-          // Scaffold.of(context).showSnackBar(
-          // SnackBar(
-          //   content: Text('You have signed up sucessfully'),
-          //   duration: Duration(seconds: 3),
-          // ));
         }
 
         widget.onSignedIn();
@@ -103,7 +97,6 @@ class _LoginState extends State<Login>
   Widget build(BuildContext context) {
     return Scaffold
     (
-      // key: _scaffoldKey,
       appBar: new AppBar
       (
         centerTitle: true,
@@ -181,6 +174,7 @@ class _LoginState extends State<Login>
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration
               (
+                prefixIcon: new Icon(Icons.mail_outline),
                 labelText: "E-mail",
                 border: OutlineInputBorder(),
               ),
@@ -190,7 +184,7 @@ class _LoginState extends State<Login>
               },
               onSaved: (value)
               {
-                return _email = value;
+                return _email = value.trim();
               },
             ),
 
@@ -206,6 +200,7 @@ class _LoginState extends State<Login>
               obscureText: true,
               decoration: InputDecoration
               (
+                prefixIcon: new Icon(Icons.lock_outline),
                 labelText: "Password",
                 border: OutlineInputBorder(),
               ),
@@ -215,7 +210,7 @@ class _LoginState extends State<Login>
               },
               onSaved: (value)
               {
-                return _password = value;
+                return _password = value.trim();
               },
             ),
              new Padding
@@ -232,9 +227,44 @@ class _LoginState extends State<Login>
         (
           decoration: InputDecoration
           (
+            prefixIcon: new Icon(Icons.person_outline),
             labelText: "Name",
             border: OutlineInputBorder(),
           ),
+          validator: (value)
+          {
+            return value.length < 3 ? "Please enter a valid name" : null;
+          },
+          onSaved: (value)
+          {
+            return _name = value.trim();
+          },
+        ),
+
+        new Padding
+        (
+          padding: EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0)
+        ),
+
+        new TextFormField
+        (
+          keyboardType: TextInputType.datetime,
+          decoration: InputDecoration
+          (
+            hintText: "25/07/1999",
+            prefixIcon: new Icon(Icons.calendar_today),
+            labelText: "Date Of Birth",
+            border: OutlineInputBorder(),
+          ),
+          validator: (value)
+          {
+            return null;
+          },
+          onSaved: (value)
+          {
+            print(value);
+            return _dateOfBirth = value.trim();
+          },
         ),
 
         new Padding
@@ -247,6 +277,7 @@ class _LoginState extends State<Login>
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration
           (
+            prefixIcon: new Icon(Icons.mail_outline),
             labelText: "E-mail",
             border: OutlineInputBorder(),
           ),
@@ -256,7 +287,7 @@ class _LoginState extends State<Login>
           },
           onSaved: (value)
           {
-            return _email = value;
+            return _email = value.trim();
           },
           ),
 
@@ -272,6 +303,7 @@ class _LoginState extends State<Login>
             obscureText: true,
             decoration: InputDecoration
             (
+              prefixIcon: new Icon(Icons.lock_outline),
               labelText: "Password",
               border: OutlineInputBorder(),
             ),
@@ -281,7 +313,7 @@ class _LoginState extends State<Login>
             },
             onSaved: (value)
             {
-              return _password = value;
+              return _password = value.trim();
             },
           ),
 

@@ -22,6 +22,8 @@ class HomePage extends StatefulWidget
 
 class _HomePage extends State<HomePage>
 {
+  String name = "";
+  String bio = "";
   List<Posts> postsList = [];
   var refreshKey = GlobalKey<RefreshIndicatorState>();
 
@@ -29,6 +31,25 @@ class _HomePage extends State<HomePage>
   void initState() 
   {
     super.initState();
+    
+    widget.auth.getCurrentUser().then((firebaseUserID)
+    {
+      DatabaseReference userRef = FirebaseDatabase.instance.reference().child("Users");
+      userRef.once().then((DataSnapshot snap)
+      {
+        var KEYS = snap.value.keys;
+        var DATA = snap.value;
+        for(var individualKey in KEYS)
+        {
+          if (DATA[individualKey]['uid'] == firebaseUserID)
+          {
+            name = DATA[individualKey]['name'];
+            bio = DATA[individualKey]['bio'];
+          }
+        }
+      });
+    });
+
 
     DatabaseReference postsRef = FirebaseDatabase.instance.reference().child("Posts");
 
@@ -46,18 +67,30 @@ class _HomePage extends State<HomePage>
           DATA[individualKey]['date'],
           DATA[individualKey]['description'], 
           DATA[individualKey]['image'],
-          DATA[individualKey]['time']
+          DATA[individualKey]['time'],
+          DATA[individualKey]['name'],
         );
 
         postsList.add(posts);
       }
-
+      postsList = sortPosts(postsList);
       setState(() 
       {
         print("No of Posts = $postsList.length");
       });
     });
 
+  }
+
+  List<Posts> sortPosts(List<Posts> t)
+  {
+    t.sort((a,b) 
+    {
+      var adata = a.date + a.time;
+      var bdata = b.date + b.time; 
+      return bdata.compareTo(adata); 
+    });
+    return t;
   }
 
   Future<Null> refreshList() async
@@ -81,14 +114,17 @@ class _HomePage extends State<HomePage>
         {
           Posts posts = new Posts
           (
+            
             DATA[individualKey]['date'],
             DATA[individualKey]['description'], 
             DATA[individualKey]['image'],
-            DATA[individualKey]['time']
+            DATA[individualKey]['time'],
+            DATA[individualKey]['name'],
           );
 
           postsList.add(posts);
         }
+        postsList = sortPosts(postsList);
       });
     });
 
@@ -117,7 +153,14 @@ class _HomePage extends State<HomePage>
     (
       appBar: new AppBar
       (
-        title: Text("Home Page"),
+        title: new Row
+        (
+          children: <Widget>
+          [
+            new Icon(Icons.add_a_photo),
+            new Text("Home Page"),
+          ],
+        ),
       ),
 
       body: new Center
@@ -133,7 +176,7 @@ class _HomePage extends State<HomePage>
               itemCount: postsList.length,
               itemBuilder: (context, index)
               {
-                return postsUI(postsList[index].date, postsList[index].description, postsList[index].image, postsList[index].time);
+                return postsUI(postsList[index].date, postsList[index].description, postsList[index].image, postsList[index].time, postsList[index].name);
               },
             ),
           ),
@@ -158,7 +201,7 @@ class _HomePage extends State<HomePage>
                   context,
                   MaterialPageRoute(builder: (context)
                   {
-                    return UploadPhoto();
+                    return UploadPhoto(name: name,);
                   })
                 );
               },
@@ -175,7 +218,7 @@ class _HomePage extends State<HomePage>
   }
 
 
-  Widget postsUI(String date, String description, String image, String time)
+  Widget postsUI(String date, String description, String image, String time, String name)
   {
     return new Card
     (
@@ -201,7 +244,16 @@ class _HomePage extends State<HomePage>
           new Padding(padding: EdgeInsets.fromLTRB(0.0,10.0,0.0,0.0)),
           new Image.network(image, fit: BoxFit.fill),
           new Padding(padding: EdgeInsets.fromLTRB(0.0,10.0,0.0,0.0)),
-          new Text(description, style: Theme.of(context).textTheme.subhead, textAlign: TextAlign.center,)
+          new Row
+          (
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>
+            [
+              new Text(name!=null?name:'', style: Theme.of(context).textTheme.subhead, textAlign: TextAlign.center,),
+              new Padding(padding: EdgeInsets.only(left: 10.0),),
+              new Text(description, style: Theme.of(context).textTheme.caption, textAlign: TextAlign.center,)
+            ],
+          ),
         ],
       ),
       )

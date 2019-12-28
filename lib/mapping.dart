@@ -21,6 +21,7 @@ class MappingPage extends StatefulWidget
 
 enum AuthStatus
 {
+  notVerified,
   signedIn,
   notSignedIn,
 }
@@ -34,11 +35,20 @@ class _MappingPageState extends State<MappingPage>
   {
     super.initState();
 
-    widget.auth.currentUser().then((firebaseUserId)
-    {
-      setState(() {
-        authStatus = firebaseUserId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
+    widget.auth.isVerified().then((onValue){
+      if(onValue)
+      {
+        authStatus = AuthStatus.notVerified;
+      }
+      else
+      {
+      widget.auth.getCurrentUser().then((firebaseUserId)
+      {
+        setState(() {
+          authStatus = firebaseUserId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
+        });
       });
+      }
     });
   }
 
@@ -48,6 +58,7 @@ class _MappingPageState extends State<MappingPage>
       authStatus = AuthStatus.signedIn;
     });
   }
+
 
   void _signedOut()
   {
@@ -71,6 +82,9 @@ class _MappingPageState extends State<MappingPage>
         auth: widget.auth,
         onSignedOut: _signedOut,
       );
+      
+      case AuthStatus.notVerified:
+      return null;
     }
     return null;
   }

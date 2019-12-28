@@ -1,10 +1,12 @@
 import "package:firebase_auth/firebase_auth.dart";
+import 'package:firebase_database/firebase_database.dart';
 
 abstract class AuthImplementation
 {
   Future<String> signIn(String email, String password);
-  Future<String> signUp(String email, String password);
-  Future<String> currentUser();
+  Future<String> signUp(String email, String password, String name, String dateOfBirth);
+  Future<String> getCurrentUser();
+  Future<bool> isVerified();
   Future<void> signOut();
 }
 
@@ -20,14 +22,34 @@ class Auth implements AuthImplementation
     return user.uid;
   }
   
-  Future<String> signUp(String email, String password) async
+  Future<String> signUp(String email, String password, String name, String dateOfBirth) async
   {
     AuthResult result = await _firebaseAuth.createUserWithEmailAndPassword(email: email , password: password);
     FirebaseUser user = result.user;
+
+    DatabaseReference userRef = FirebaseDatabase.instance.reference().child("Users");
+    var data =
+    {
+      "name": name,
+      "dob": dateOfBirth,
+      "uid": user.uid,
+    };
+    userRef.push().set(data);
+
+    try 
+    {
+      await user.sendEmailVerification();
+      return user.uid;
+    } 
+    catch (e) 
+    {
+      print("An error occured while trying to send email verification");
+      print(e.message);
+    }
     return user.uid;
   }
 
-  Future<String> currentUser() async
+  Future<String> getCurrentUser() async
   {
     FirebaseUser user = await _firebaseAuth.currentUser();
     return user.uid;
@@ -38,4 +60,9 @@ class Auth implements AuthImplementation
     _firebaseAuth.signOut();
   }
 
+  Future<bool> isVerified() async
+  {
+    FirebaseUser user = await _firebaseAuth.currentUser();
+    return(user.isEmailVerified);
+  }
 }

@@ -84,6 +84,7 @@ class Auth implements AuthImplementation
     try 
     {
       await user.sendEmailVerification();
+      _firebaseAuth.signOut();
     } 
     catch (e) 
     {

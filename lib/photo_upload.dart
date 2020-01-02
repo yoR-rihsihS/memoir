@@ -46,7 +46,7 @@ class _UploadPhotoState extends State<UploadPhoto>
       file.absolute.path,
       minWidth: 1920,
       minHeight: 1080,
-      quality: 90,
+      quality: 85,
     );
     return result;
   }

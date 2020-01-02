@@ -158,6 +158,7 @@ class _HomePage extends State<HomePage>
           children: <Widget>
           [
             new Icon(Icons.add_a_photo),
+            new Padding(padding: EdgeInsets.only(left: 8.0),),
             new Text("Home Page"),
           ],
         ),

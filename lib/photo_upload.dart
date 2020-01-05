@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'dart:typed_data';
+// import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -33,20 +33,20 @@ class _UploadPhotoState extends State<UploadPhoto>
   Future selectImage() async
   {
     var tempImage = await ImagePicker.pickImage(source: ImageSource.gallery);
-    List<int> image = await testCompressFile(tempImage);
+    List<int> image = await compressFile(tempImage);
     tempImage.writeAsBytes(image, flush: true, mode: FileMode.write);
     setState(() {
       sampleImage = tempImage;
     });
   }
 
-  Future<List<int>> testCompressFile(File file) async 
+  Future<List<int>> compressFile(File file) async 
   {
     var result = await FlutterImageCompress.compressWithFile(
       file.absolute.path,
       minWidth: 1920,
       minHeight: 1080,
-      quality: 85,
+      quality: 80,
     );
     return result;
   }

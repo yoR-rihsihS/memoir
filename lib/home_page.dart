@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:memoir/viewblog.dart';
 import 'authentication.dart';
 import 'editor.dart';
 import 'posts.dart';
@@ -77,10 +78,10 @@ class _HomePage extends State<HomePage>
 
         postsList.add(posts);
       }
-      postsList = sortPosts(postsList);
+      
       setState(() 
       {
-        print("No of Posts = $postsList.length");
+        postsList = sortPosts(postsList);
       });
     });
 
@@ -230,57 +231,71 @@ class _HomePage extends State<HomePage>
     (
       elevation: 10.0,
       margin: EdgeInsets.all(10.0),
-      child: new Padding
+      child: new InkWell
       (
-        padding: EdgeInsets.all(10.0),
-        child: new Column
-      (
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>
-        [
-          new Row
+        onTap: ()
+        {
+          Navigator.push
           (
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>
-            [
-              new Text(time, style: Theme.of(context).textTheme.subtitle),
-              new Text(date, style: Theme.of(context).textTheme.subtitle),
-            ],
-          ),
-          new Padding(padding: EdgeInsets.fromLTRB(0.0,10.0,0.0,0.0)),
-          new Image.network(image),
-          new Padding(padding: EdgeInsets.fromLTRB(0.0,10.0,0.0,0.0)),
-          new Row
-          (
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>
-            [
-              new Expanded
-              (
-                child: new RichText
+            context,
+            MaterialPageRoute(builder: (context)
+            {
+              return ViewPage(doc: post,);
+            })
+          );
+        },
+        child: new Padding
+        (
+          padding: EdgeInsets.all(10.0),
+          child: new Column
+        (
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>
+          [
+            new Row
+            (
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>
+              [
+                new Text(time, style: Theme.of(context).textTheme.subtitle),
+                new Text(date, style: Theme.of(context).textTheme.subtitle),
+              ],
+            ),
+            new Padding(padding: EdgeInsets.fromLTRB(0.0,10.0,0.0,0.0)),
+            new Image.network(image),
+            new Padding(padding: EdgeInsets.fromLTRB(0.0,10.0,0.0,0.0)),
+            new Row
+            (
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>
+              [
+                new Expanded
                 (
-                  text: TextSpan
+                  child: new RichText
                   (
-                    text: preview,
-                    style: Theme.of(context).textTheme.display1,
+                    text: TextSpan
+                    (
+                      text: preview,
+                      style: Theme.of(context).textTheme.display1,
+                    ),
+                    textAlign: TextAlign.start, 
+                    maxLines: null,
                   ),
-                  textAlign: TextAlign.start, 
-                  maxLines: null,
                 ),
-              ),
-            ],
-          ),
-          new Row
-          (
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>
-            [
-              new Text(name!=null?name:'', style: Theme.of(context).textTheme.subhead, textAlign: TextAlign.center,),
-            ],
-          ),
-        ],
+              ],
+            ),
+            new Row
+            (
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>
+              [
+                new Text(name!=null?name:'', style: Theme.of(context).textTheme.subhead, textAlign: TextAlign.center,),
+              ],
+            ),
+          ],
+        ),
+        )
       ),
-      )
     );
   }
 }

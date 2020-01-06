@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'mapping.dart';
 import 'authentication.dart';
-import 'editor.dart';
 
 
 
@@ -15,7 +14,6 @@ class Memoir extends StatelessWidget
     (
       title: "Memoir",
       home: MappingPage(auth: Auth(),),
-     //home: EditorPage(),
     );
   }
 }

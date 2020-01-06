@@ -99,8 +99,8 @@ class EditorPageState extends State<EditorPage>
 
     var timeKey = new DateTime.now();
     File post = await file.writeAsString(contents);
-    final StorageUploadTask uploadTask = postImageRef.child(timeKey.toString() + ".json").putFile(post);
-
+    final StorageUploadTask uploadTask = postImageRef.child(timeKey.toString() + ".txt").putFile(post);
+  
     var postUrl = await (await uploadTask.onComplete).ref.getDownloadURL();
 
     _url = postUrl.toString();
@@ -125,8 +125,10 @@ class EditorPageState extends State<EditorPage>
 
     DatabaseReference ref = FirebaseDatabase.instance.reference();
     ref.child("Posts").push().set(data); 
-  }
 
+    Navigator.pop(context);
+  }
+  
 }
 
 

@@ -116,6 +116,11 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_web_plugins:
+    dependency: transitive
+    description: flutter
+    source: sdk
+    version: "0.0.0"
   image:
     dependency: transitive
     description:
@@ -151,6 +156,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.8"
+  notus:
+    dependency: transitive
+    description:
+      name: notus
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.4"
   path:
     dependency: transitive
     description:
@@ -172,6 +184,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.4.0"
+  plugin_platform_interface:
+    dependency: transitive
+    description:
+      name: plugin_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
+  quill_delta:
+    dependency: transitive
+    description:
+      name: quill_delta
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   quiver:
     dependency: transitive
     description:
@@ -240,6 +266,34 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.6"
+  url_launcher:
+    dependency: transitive
+    description:
+      name: url_launcher
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "5.4.1"
+  url_launcher_macos:
+    dependency: transitive
+    description:
+      name: url_launcher_macos
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.1+2"
+  url_launcher_platform_interface:
+    dependency: transitive
+    description:
+      name: url_launcher_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.5"
+  url_launcher_web:
+    dependency: transitive
+    description:
+      name: url_launcher_web
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.0+2"
   vector_math:
     dependency: transitive
     description:
@@ -254,6 +308,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.5.0"
+  zefyr:
+    dependency: "direct main"
+    description:
+      path: "packages/zefyr"
+      ref: fix-text-input-connection-closed
+      resolved-ref: "0fabb4fdbb5ff3bcfff5f7831597ee31579beaf0"
+      url: "git://github.com/memspace/zefyr.git"
+    source: git
+    version: "0.8.0"
 sdks:
   dart: ">=2.4.0 <3.0.0"
-  flutter: ">=1.10.0 <2.0.0"
+  flutter: ">=1.12.8 <2.0.0"

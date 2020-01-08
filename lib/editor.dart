@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:quill_delta/quill_delta.dart';
 import 'package:zefyr/zefyr.dart';
+import 'package:progressive_image/progressive_image.dart';
 
 
 
@@ -167,8 +168,16 @@ class MyAppZefyrImageDelegate implements ZefyrImageDelegate<ImageSource>
   @override
   Widget buildImage(BuildContext context, String key) 
   {
-    final image = NetworkImage(key);
-    return Image(image: image);
+    return ProgressiveImage
+    (
+      blur: 10.0,
+      placeholder: AssetImage("assets/placeholder.jpg"),
+      thumbnail: AssetImage("assets/placeholder.jpg"),
+      image: NetworkImage(key),
+      width: 1920,
+      height: 1080,
+      fit: BoxFit.scaleDown,
+    );
   }
 
 

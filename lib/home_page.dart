@@ -5,6 +5,7 @@ import 'authentication.dart';
 import 'editor.dart';
 import 'posts.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:progressive_image/progressive_image.dart';
 
 class HomePage extends StatefulWidget
 {
@@ -262,7 +263,16 @@ class _HomePage extends State<HomePage>
               ],
             ),
             new Padding(padding: EdgeInsets.fromLTRB(0.0,10.0,0.0,0.0)),
-            new Image.network(image),
+            new ProgressiveImage
+            (
+              placeholder: AssetImage("assets/placeholder.jpg"),
+              thumbnail: AssetImage("assets/placeholder.jpg"),
+              image: NetworkImage(image),
+              blur: 10,
+              width: 1920,
+              height: 1080,
+              fit: BoxFit.fill,
+            ),
             new Padding(padding: EdgeInsets.fromLTRB(0.0,10.0,0.0,0.0)),
             new Row
             (

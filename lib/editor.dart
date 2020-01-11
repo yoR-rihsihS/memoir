@@ -27,7 +27,7 @@ class EditorPage extends StatefulWidget
 class EditorPageState extends State<EditorPage> 
 {
   String _url;
-
+  TextEditingController _cont;
   String preview;
   String image;
 
@@ -36,8 +36,10 @@ class EditorPageState extends State<EditorPage>
   FocusNode _focusNode;
 
   @override
-  void initState() {
+  void initState() 
+  {
     super.initState();
+    _cont = new TextEditingController();
     final document = _loadDocument();
     _controller = ZefyrController(document);
     _focusNode = FocusNode();
@@ -86,15 +88,52 @@ class EditorPageState extends State<EditorPage>
 
   void _saveDocument(BuildContext context) async
   {
+    showDialog
+    (
+      child: new SimpleDialog
+      (
+        title: new Text("Title"),
+        elevation: 20.00,
+        children: <Widget>
+        [
+          new Padding
+          (
+            padding: EdgeInsets.only(left: 10.0,right: 10.0),
+            child: new TextField
+            (
+              controller: _cont,
+              maxLines: null,
+              decoration: new InputDecoration
+              (
+                hintText: "Enter Title here!",
+              ),
+            ),
+          ),
+          
+          new Padding
+          (
+            padding: EdgeInsets.all(10.0),
+            child: new OutlineButton
+            (
+              child: new Text("Post"),
+              onPressed: ()
+              {
+                setState(()
+                {
+                  this.preview = _cont.text;
+                });
+                Navigator.pop(context);
+              },
+            ),
+          ),
+          
+        ],
+      ),
+
+      context: context,
+    );
     final contents = jsonEncode(_controller.document);
     image = contents.substring(contents.indexOf("https") , contents.indexOf("}}}") - 1);
-    preview = contents.substring( 12 , contents.indexOf("}") - 1);
-    if(preview.contains("http"))
-    {
-      preview = contents.substring(contents.indexOf("}}},"));
-      preview = preview.substring( 0 , preview.indexOf("attributes") - 3 );
-      preview = preview.substring(preview.lastIndexOf("insert") + 9 );
-    }
     final file = File(Directory.systemTemp.path + "/quick_start.json");
     final StorageReference postImageRef = FirebaseStorage.instance.ref().child("Posts");
 

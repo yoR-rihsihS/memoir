@@ -249,61 +249,62 @@ class _HomePage extends State<HomePage>
         (
           padding: EdgeInsets.all(10.0),
           child: new Column
-        (
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>
-          [
-            new Row
-            (
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>
-              [
-                new Text(time, style: Theme.of(context).textTheme.subtitle),
-                new Text(date, style: Theme.of(context).textTheme.subtitle),
-              ],
-            ),
-            new Padding(padding: EdgeInsets.fromLTRB(0.0,10.0,0.0,0.0)),
-            new ProgressiveImage
-            (
-              placeholder: AssetImage("assets/placeholder.jpg"),
-              thumbnail: AssetImage("assets/placeholder.jpg"),
-              image: NetworkImage(image),
-              blur: 10,
-              width: 1920,
-              height: 1080,
-              fit: BoxFit.fill,
-            ),
-            new Padding(padding: EdgeInsets.fromLTRB(0.0,10.0,0.0,0.0)),
-            new Row
-            (
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>
-              [
-                new Expanded
-                (
-                  child: new RichText
+          (
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>
+            [
+              new Row
+              (
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>
+                [
+                  new Text(time, style: Theme.of(context).textTheme.subtitle),
+                  new Text(date, style: Theme.of(context).textTheme.subtitle),
+                ],
+              ),
+              new Padding(padding: EdgeInsets.fromLTRB(0.0,10.0,0.0,0.0)),
+              new ProgressiveImage
+              (
+                placeholder: AssetImage("assets/placeholder.jpg"),
+                thumbnail: AssetImage("assets/placeholder.jpg"),
+                image: NetworkImage(image),
+                blur: 10,
+                width: 400,
+                height: 400,
+                fit: BoxFit.contain,
+              ),
+              new Padding(padding: EdgeInsets.fromLTRB(0.0,10.0,0.0,0.0)),
+              new Row
+              (
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>
+                [
+                  new Expanded
                   (
-                    text: TextSpan
+                    child: new RichText
                     (
-                      text: preview,
-                      style: Theme.of(context).textTheme.display1,
+                      text: TextSpan
+                      (
+                        text: preview,
+                        style: Theme.of(context).textTheme.display1,
+                      ),
+                      textAlign: TextAlign.start, 
+                      maxLines: null,
                     ),
-                    textAlign: TextAlign.start, 
-                    maxLines: null,
                   ),
-                ),
-              ],
-            ),
-            new Row
-            (
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>
-              [
-                new Text(name!=null?name:'', style: Theme.of(context).textTheme.subhead, textAlign: TextAlign.center,),
-              ],
-            ),
-          ],
-        ),
+                ],
+              ),
+              new Row
+              (
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>
+                [
+                  new Text(name!=null?name:'', style: Theme.of(context).textTheme.subhead, textAlign: TextAlign.center,),
+                ],
+              ),
+            ],
+          ),
         )
       ),
     );

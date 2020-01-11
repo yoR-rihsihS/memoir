@@ -1,9 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:progressive_image/progressive_image.dart';
 import 'package:path_provider/path_provider.dart';
@@ -93,30 +91,7 @@ class MyAppZefyrImageDelegate implements ZefyrImageDelegate<ImageSource>
   @override
   Future<String> pickImage(ImageSource source) async 
   {
-    final file = await ImagePicker.pickImage(source: source);
-    if (file == null) 
-    {
-      return null;
-    }
-    else{
-      var result = await FlutterImageCompress.compressWithFile(
-        file.absolute.path,
-        minWidth: 1920,
-        minHeight: 1080,
-        quality: 80,
-      );
-      file.writeAsBytes(result, flush: true, mode: FileMode.write);
-      final StorageReference postImageRef = FirebaseStorage.instance.ref().child("Images");
-
-      var timeKey = new DateTime.now();
-
-      final StorageUploadTask uploadTask = postImageRef.child(timeKey.toString() + ".jpg").putFile(file);
-
-      var imageUrl = await (await uploadTask.onComplete).ref.getDownloadURL();
-
-      
-      return imageUrl.toString();
-    }
+    return null;
   }
 
 

@@ -88,7 +88,7 @@ class EditorPageState extends State<EditorPage>
 
   void _saveDocument(BuildContext context) async
   {
-    showDialog
+    await showDialog
     (
       child: new SimpleDialog
       (
@@ -133,13 +133,20 @@ class EditorPageState extends State<EditorPage>
       context: context,
     );
     final contents = jsonEncode(_controller.document);
-    image = contents.substring(contents.indexOf("https") , contents.indexOf("}}}") - 1);
+    if (contents.contains("image"))
+    {
+      image = contents.substring(contents.indexOf("https") , contents.indexOf("}}}") - 1);
+    }
+    else
+    {
+      image = null;
+    }
     final file = File(Directory.systemTemp.path + "/quick_start.json");
     final StorageReference postImageRef = FirebaseStorage.instance.ref().child("Posts");
 
     var timeKey = new DateTime.now();
     File post = await file.writeAsString(contents);
-    final StorageUploadTask uploadTask = postImageRef.child(timeKey.toString() + ".txt").putFile(post);
+    final StorageUploadTask uploadTask = postImageRef.child(timeKey.toString() + ".json").putFile(post);
   
     var postUrl = await (await uploadTask.onComplete).ref.getDownloadURL();
 

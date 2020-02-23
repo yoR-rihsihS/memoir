@@ -8,6 +8,7 @@ class Login extends StatefulWidget
     this.auth,
     this.onSignedIn,
   });
+
   final AuthImplementation auth;
   final VoidCallback onSignedIn;
 

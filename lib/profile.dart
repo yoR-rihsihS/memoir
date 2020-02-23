@@ -1,32 +1,31 @@
-import 'dart:async';
-import 'dart:ui';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:memoir/viewblog.dart';
 import 'authentication.dart';
 import 'editor.dart';
-import 'posts.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:progressive_image/progressive_image.dart';
-import 'profile.dart';
+import 'home_page.dart';
 import 'post_ui.dart';
+import 'posts.dart';
 
-class HomePage extends StatefulWidget
+
+class ProfilePage extends StatefulWidget 
 {
-  HomePage({
+  ProfilePage({
+    this.name,
+    this.uId,
     this.auth,
     this.onSignedOut,
   });
-  
+
+  final String name;
+  final String uId;
   final AuthImplementation auth;
   final VoidCallback onSignedOut;
 
-  State<StatefulWidget> createState()
-  {
-    return _HomePage();
-  }
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
 }
 
-class _HomePage extends State<HomePage>
+class _ProfilePageState extends State<ProfilePage> 
 {
   String name = "";
   String bio = "";
@@ -34,11 +33,24 @@ class _HomePage extends State<HomePage>
   List<Posts> postsList = [];
   var refreshKey = GlobalKey<RefreshIndicatorState>();
 
+  void _logOutUser() async
+  {
+    try
+    {
+      await widget.auth.signOut();
+      widget.onSignedOut();
+    }
+    catch(e)
+    {
+      print("Error ="+ e.toString());
+    }
+  }
   @override
   void initState() 
   {
     super.initState();
-    
+
+
     widget.auth.getCurrentUser().then((firebaseUserID)
     {
       DatabaseReference userRef = FirebaseDatabase.instance.reference().child("Users");
@@ -58,11 +70,11 @@ class _HomePage extends State<HomePage>
       });
     });
 
-
     DatabaseReference postsRef = FirebaseDatabase.instance.reference().child("Posts");
 
     postsRef.once().then((DataSnapshot snap)
     {
+      
       var KEYS = snap.value.keys;
       var DATA = snap.value;
 
@@ -81,15 +93,20 @@ class _HomePage extends State<HomePage>
           
         );
 
-        postsList.add(posts);
+        if(posts.name == name)
+        {
+          postsList.add(posts);
+        }
+        print(postsList.length);
+        
       }
       
       setState(() 
       {
         postsList = sortPosts(postsList);
+        
       });
     });
-    
     
   }
 
@@ -103,7 +120,7 @@ class _HomePage extends State<HomePage>
     });
     return t;
   }
-
+  
   Future<Null> refreshList() async
   {
     refreshKey.currentState.show();
@@ -142,60 +159,99 @@ class _HomePage extends State<HomePage>
 
    return null;
   }
-
-
-  void _logOutUser() async
-  {
-    try
-    {
-      await widget.auth.signOut();
-      widget.onSignedOut();
-    }
-    catch(e)
-    {
-      print("Error ="+ e.toString());
-    }
-  }
-
+  
 
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) 
+  {
     return Scaffold
     (
       appBar: new AppBar
       (
-        title: new Row
-        (
-          children: <Widget>
-          [
-            new Icon(Icons.add_a_photo),
-            new Padding(padding: EdgeInsets.only(left: 8.0),),
-            new Text("Home Page"),
-          ],
-        ),
+        title: new Text(widget.name),
+
       ),
 
-      body: new Center
+      body: new Column
       (
-        child: new Container
-        (
-          child: new RefreshIndicator
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>
+        [
+          new Card
           (
-            key: refreshKey,
-            onRefresh: refreshList,
-            child: postsList.length == 0 ? new Text("No Posts available") : new ListView.builder
+            elevation: 10.0,
+            margin: EdgeInsets.only(top:10.0, left:10.0, right:10.0),
+            child: new Row
             (
-              itemCount: postsList.length,
-              itemBuilder: (context, index)
-              {
-                return PostUI().postsUI(postsList[index].preview, postsList[index].image, postsList[index].date, postsList[index].name, postsList[index].post, postsList[index].time, context);
-              },
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>
+              [
+                new Padding
+                (
+                  padding: EdgeInsets.only
+                  (
+                    left: 20.0,
+                    top: 20.0,
+                    right: 20.0,
+                    bottom: 20.0,
+                  ),
+                  child: new CircleAvatar
+                  (
+                    radius: 60.0,
+                    child: new Icon
+                    (
+                      Icons.person_outline,
+                      size: 80.0,
+                    ),
+                    backgroundColor: Colors.blueGrey,
+                  ),
+                ),
+                new Padding
+                (
+                  padding: const EdgeInsets.only
+                  (
+                    left: 20.0,
+                    right: 20.0,
+                    top: 20.0,
+                    bottom: 20.0,
+                  ),
+                  child: bio == null ? new Text("Bio is empty") : new Text
+                  (
+                    bio,
+                    maxLines: null,
+                  ),
+                ),
+              ],
             ),
           ),
-        ),
+          
+          new Center
+          (
+            child: new Container
+             (
+              height: 467.0,
+              child: new RefreshIndicator
+              (
+                key: refreshKey,
+                onRefresh: refreshList,
+                child: postsList.length == 0 ? new Text("No Posts available") : new ListView.builder
+                (
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: postsList.length,
+                  itemBuilder: (context, index)
+                  {
+                    return PostUI().postsUI(postsList[index].preview, postsList[index].image, postsList[index].date, postsList[index].name, postsList[index].post, postsList[index].time, context);
+                  },
+                ),
+              ),
+            ),
+          )
+        ],
       ),
-      
+
+
       bottomNavigationBar: new BottomAppBar
       (
         color: Colors.lightBlueAccent,
@@ -207,7 +263,17 @@ class _HomePage extends State<HomePage>
             new IconButton
             (
               icon: new Icon(Icons.home),
-              onPressed: (){},
+              onPressed: ()
+              {
+                Navigator.pushReplacement
+                (
+                  context,
+                  MaterialPageRoute(builder: (context)
+                  {
+                    return HomePage(auth: widget.auth, onSignedOut: widget.onSignedOut,);
+                  })
+                );
+              },
             ),
             new IconButton
             (
@@ -219,7 +285,7 @@ class _HomePage extends State<HomePage>
                   context,
                   MaterialPageRoute(builder: (context)
                   {
-                    return EditorPage(name: name,uId: uid,);
+                    return EditorPage(name: widget.name,uId: widget.uId,);
                   })
                 );
               },
@@ -232,17 +298,7 @@ class _HomePage extends State<HomePage>
             new IconButton
             (
               icon: new Icon(Icons.account_circle),
-              onPressed: ()
-              {
-                Navigator.pushReplacement
-                (
-                  context,
-                  MaterialPageRoute(builder: (context)
-                  {
-                    return ProfilePage(name: name,uId: uid,auth: widget.auth,onSignedOut: widget.onSignedOut);
-                  })
-                );
-              },
+              onPressed: (){},
             ),
           ],
         ),

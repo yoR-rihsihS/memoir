@@ -1,6 +1,8 @@
 import "package:firebase_auth/firebase_auth.dart";
 import 'package:firebase_database/firebase_database.dart';
 
+
+
 abstract class AuthImplementation
 {
   Future<String> signIn(String email, String password);
@@ -11,6 +13,9 @@ abstract class AuthImplementation
   Future<void> resetPassword(String email);
   Future<void> verifyUser();
 }
+
+
+
 
 class Auth implements AuthImplementation
 {
@@ -47,7 +52,6 @@ class Auth implements AuthImplementation
     } 
     catch (e) 
     {
-      print("An error occured while trying to send email verification");
       print(e.message);
     }
     return user.uid;
@@ -88,7 +92,6 @@ class Auth implements AuthImplementation
     } 
     catch (e) 
     {
-      print("An error occured while trying to send email verification");
       print(e.message);
     }
   }

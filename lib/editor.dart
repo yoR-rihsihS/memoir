@@ -30,9 +30,7 @@ class EditorPageState extends State<EditorPage>
   TextEditingController _cont;
   String preview;
   String image;
-
   ZefyrController _controller;
-
   FocusNode _focusNode;
 
   @override

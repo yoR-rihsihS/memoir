@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memoir/authentication.dart';
+import 'package:oktoast/oktoast.dart';
 
 
 class Login extends StatefulWidget
@@ -105,7 +106,7 @@ class _LoginState extends State<Login>
       }
       catch(e)
       {
-        print("Error =" + e.toString());
+        showToast(e.message, duration: Duration(seconds: 3), position: ToastPosition.bottom);
       }
     }
   }

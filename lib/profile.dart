@@ -1,5 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:oktoast/oktoast.dart';
 import 'authentication.dart';
 import 'editor.dart';
 import 'home_page.dart';
@@ -12,10 +13,12 @@ class ProfilePage extends StatefulWidget
   ProfilePage({
     this.name,
     this.uId,
+    this.bio,
     this.auth,
     this.onSignedOut,
   });
 
+  final String bio;
   final String name;
   final String uId;
   final AuthImplementation auth;
@@ -27,9 +30,6 @@ class ProfilePage extends StatefulWidget
 
 class _ProfilePageState extends State<ProfilePage> 
 {
-  String name = "";
-  String bio = "";
-  String uid = "";
   List<Posts> postsList = [];
   var refreshKey = GlobalKey<RefreshIndicatorState>();
 
@@ -42,39 +42,19 @@ class _ProfilePageState extends State<ProfilePage>
     }
     catch(e)
     {
-      print("Error ="+ e.toString());
+      showToast(e.message, duration: Duration(seconds: 3), position: ToastPosition.bottom);
     }
   }
+
   @override
   void initState() 
   {
     super.initState();
 
-
-    widget.auth.getCurrentUser().then((firebaseUserID)
-    {
-      DatabaseReference userRef = FirebaseDatabase.instance.reference().child("Users");
-      userRef.once().then((DataSnapshot snap)
-      {
-        var KEYS = snap.value.keys;
-        var DATA = snap.value;
-        for(var individualKey in KEYS)
-        {
-          if (DATA[individualKey]['uid'] == firebaseUserID)
-          {
-            name = DATA[individualKey]['name'];
-            bio = DATA[individualKey]['bio'];
-            uid = DATA[individualKey]['uid'];
-          }
-        }
-      });
-    });
-
     DatabaseReference postsRef = FirebaseDatabase.instance.reference().child("Posts");
 
     postsRef.once().then((DataSnapshot snap)
     {
-      
       var KEYS = snap.value.keys;
       var DATA = snap.value;
 
@@ -93,12 +73,10 @@ class _ProfilePageState extends State<ProfilePage>
           
         );
 
-        if(posts.name == name)
+        if(posts.name == widget.name)
         {
           postsList.add(posts);
-        }
-        print(postsList.length);
-        
+        }       
       }
       
       setState(() 
@@ -127,8 +105,7 @@ class _ProfilePageState extends State<ProfilePage>
     await Future.delayed(Duration(seconds: 3));
 
     setState(() 
-    {
-      
+    { 
       DatabaseReference postsRef = FirebaseDatabase.instance.reference().child("Posts");
 
       postsRef.once().then((DataSnapshot snap)
@@ -151,7 +128,10 @@ class _ProfilePageState extends State<ProfilePage>
             
           );
 
-          postsList.add(posts);
+          if(posts.name == widget.name)
+          {
+            postsList.add(posts);
+          }
         }
         postsList = sortPosts(postsList);
       });
@@ -170,7 +150,6 @@ class _ProfilePageState extends State<ProfilePage>
       appBar: new AppBar
       (
         title: new Text(widget.name),
-
       ),
 
       body: new Column
@@ -216,9 +195,9 @@ class _ProfilePageState extends State<ProfilePage>
                     top: 20.0,
                     bottom: 20.0,
                   ),
-                  child: bio == null ? new Text("Bio is empty") : new Text
+                  child: widget.bio == null ? new Text("Bio is empty") : new Text
                   (
-                    bio,
+                    widget.bio,
                     maxLines: null,
                   ),
                 ),

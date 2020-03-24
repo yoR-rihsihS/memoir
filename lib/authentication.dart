@@ -1,5 +1,6 @@
 import "package:firebase_auth/firebase_auth.dart";
 import 'package:firebase_database/firebase_database.dart';
+import 'package:oktoast/oktoast.dart';
 
 
 
@@ -52,7 +53,7 @@ class Auth implements AuthImplementation
     } 
     catch (e) 
     {
-      print(e.message);
+      showToast(e.message, duration: Duration(seconds: 3), position: ToastPosition.bottom);
     }
     return user.uid;
   }
@@ -87,12 +88,14 @@ class Auth implements AuthImplementation
     FirebaseUser user = await _firebaseAuth.currentUser();
     try 
     {
-      await user.sendEmailVerification();
+      await user.sendEmailVerification().whenComplete((){
+        showToast("Check your mail to verify account!", duration: Duration(seconds: 3), position: ToastPosition.bottom);
+      });
       _firebaseAuth.signOut();
     } 
     catch (e) 
     {
-      print(e.message);
+      showToast(e.message, duration: Duration(seconds: 3), position: ToastPosition.bottom);
     }
   }
   //
@@ -100,7 +103,9 @@ class Auth implements AuthImplementation
   //
   Future<void> resetPassword(String email) async 
   {
-    await _firebaseAuth.sendPasswordResetEmail(email: email);
+    await _firebaseAuth.sendPasswordResetEmail(email: email).whenComplete((){
+      showToast("Check your mail to reset password!", duration: Duration(seconds: 3), position: ToastPosition.bottom);
+    });
   }
   //
 }

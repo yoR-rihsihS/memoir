@@ -32,6 +32,7 @@ dependencies:
   dio: ^3.0.8
   progressive_image: ^1.0.1
   path_provider:
+  oktoast: ^2.3.1
   zefyr: 
     git:
           url: git://github.com/memspace/zefyr.git

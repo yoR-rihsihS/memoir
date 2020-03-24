@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:memoir/viewblog.dart';
+import 'package:oktoast/oktoast.dart';
 import 'authentication.dart';
 import 'editor.dart';
 import 'posts.dart';
@@ -153,7 +154,7 @@ class _HomePage extends State<HomePage>
     }
     catch(e)
     {
-      print("Error ="+ e.toString());
+      showToast(e.message, duration: Duration(seconds: 3), position: ToastPosition.bottom);
     }
   }
 
@@ -165,15 +166,7 @@ class _HomePage extends State<HomePage>
     (
       appBar: new AppBar
       (
-        title: new Row
-        (
-          children: <Widget>
-          [
-            new Icon(Icons.add_a_photo),
-            new Padding(padding: EdgeInsets.only(left: 8.0),),
-            new Text("Home Page"),
-          ],
-        ),
+        title: new Text("Home Page"),
       ),
 
       body: new Center

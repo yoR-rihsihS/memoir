@@ -1,15 +1,14 @@
-import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:memoir/viewblog.dart';
+import 'package:memoir/page_content.dart';
 import 'package:oktoast/oktoast.dart';
 import 'authentication.dart';
 import 'editor.dart';
 import 'posts.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:progressive_image/progressive_image.dart';
-import 'profile.dart';
-import 'post_ui.dart';
+
+
 
 class HomePage extends StatefulWidget
 {
@@ -29,6 +28,15 @@ class HomePage extends StatefulWidget
 
 class _HomePage extends State<HomePage>
 {
+ 
+  
+  int _currentIndex = 0;
+  final List<Widget> _children = 
+  [
+    PageContent(index: 1,),
+    PageContent(index: 2,),
+    PageContent(index: 3,),
+  ];
   String name = "";
   String bio = "";
   String uid = "";
@@ -54,95 +62,17 @@ class _HomePage extends State<HomePage>
             name = DATA[individualKey]['name'];
             bio = DATA[individualKey]['bio'];
             uid = DATA[individualKey]['uid'];
+            print(uid);
           }
         }
       });
     });
 
-
-    DatabaseReference postsRef = FirebaseDatabase.instance.reference().child("Posts");
-
-    postsRef.once().then((DataSnapshot snap)
-    {
-      var KEYS = snap.value.keys;
-      var DATA = snap.value;
-
-      postsList.clear();
-
-      for(var individualKey in KEYS)
-      {
-        Posts posts = new Posts
-        (
-          DATA[individualKey]['preview'],
-          DATA[individualKey]['image'],
-          DATA[individualKey]['date'], 
-          DATA[individualKey]['name'],
-          DATA[individualKey]['post'],
-          DATA[individualKey]['time'],
-          
-        );
-
-        postsList.add(posts);
-      }
-      
-      setState(() 
-      {
-        postsList = sortPosts(postsList);
-      });
-    });
     
     
   }
 
-  List<Posts> sortPosts(List<Posts> t)
-  {
-    t.sort((a,b) 
-    {
-      var adata = a.date + a.time;
-      var bdata = b.date + b.time; 
-      return bdata.compareTo(adata); 
-    });
-    return t;
-  }
-
-  Future<Null> refreshList() async
-  {
-    refreshKey.currentState.show();
-    await Future.delayed(Duration(seconds: 3));
-
-    setState(() 
-    {
-      
-      DatabaseReference postsRef = FirebaseDatabase.instance.reference().child("Posts");
-
-      postsRef.once().then((DataSnapshot snap)
-      {
-        var KEYS = snap.value.keys;
-        var DATA = snap.value;
-
-        postsList.clear();
-
-        for(var individualKey in KEYS)
-        {
-          Posts posts = new Posts
-          (
-            DATA[individualKey]['preview'],
-            DATA[individualKey]['image'],
-            DATA[individualKey]['date'],
-            DATA[individualKey]['name'], 
-            DATA[individualKey]['post'],
-            DATA[individualKey]['time'],
-            
-          );
-
-          postsList.add(posts);
-        }
-        postsList = sortPosts(postsList);
-      });
-    });
-
-   return null;
-  }
+ 
 
 
   void _logOutUser() async
@@ -158,6 +88,11 @@ class _HomePage extends State<HomePage>
     }
   }
 
+  void onTabTapped(int index) {
+   setState(() {
+     _currentIndex = index;
+   });
+ }
 
 
   @override
@@ -167,78 +102,38 @@ class _HomePage extends State<HomePage>
       appBar: new AppBar
       (
         title: new Text("Home Page"),
+        actions: <Widget>
+        [
+          new IconButton(icon: new Icon(Icons.pets), onPressed: _logOutUser),
+        ],
       ),
 
-      body: new Center
-      (
-        child: new Container
-        (
-          child: new RefreshIndicator
-          (
-            key: refreshKey,
-            onRefresh: refreshList,
-            child: postsList.length == 0 ? new Text("No Posts available") : new ListView.builder
-            (
-              itemCount: postsList.length,
-              itemBuilder: (context, index)
-              {
-                return PostUI().postsUI(postsList[index].preview, postsList[index].image, postsList[index].date, postsList[index].name, postsList[index].post, postsList[index].time, context);
-              },
-            ),
-          ),
-        ),
-      ),
       
-      bottomNavigationBar: new BottomAppBar
+
+      body: _children[_currentIndex],
+      
+      
+      bottomNavigationBar: new BottomNavigationBar
       (
-        color: Colors.lightBlueAccent,
-        child: new Row
-        (
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>
-          [
-            new IconButton
-            (
-              icon: new Icon(Icons.home),
-              onPressed: (){},
-            ),
-            new IconButton
-            (
-              icon: new Icon(Icons.add_photo_alternate),
-              onPressed: ()
-              {
-                Navigator.push
-                (
-                  context,
-                  MaterialPageRoute(builder: (context)
-                  {
-                    return EditorPage(name: name,uId: uid,);
-                  })
-                );
-              },
-            ),
-            new IconButton
-            (
-              icon: new Icon(Icons.pets),
-              onPressed: _logOutUser,
-            ),
-            new IconButton
-            (
-              icon: new Icon(Icons.account_circle),
-              onPressed: ()
-              {
-                Navigator.pushReplacement
-                (
-                  context,
-                  MaterialPageRoute(builder: (context)
-                  {
-                    return ProfilePage(name: name,uId: uid,auth: widget.auth,onSignedOut: widget.onSignedOut);
-                  })
-                );
-              },
-            ),
-          ],
-        ),
+        onTap: onTabTapped, 
+        currentIndex: _currentIndex,
+        items: [
+         new BottomNavigationBarItem
+         (
+           icon: Icon(Icons.home),
+           title: Text('Home'),
+         ),
+         new BottomNavigationBarItem
+         (
+           icon: Icon(Icons.add_photo_alternate),
+           title: Text('Post'),
+         ),
+         new BottomNavigationBarItem
+         (
+           icon: Icon(Icons.account_circle),
+           title: Text('Profile')
+         )
+       ], 
       ),
     );
   }

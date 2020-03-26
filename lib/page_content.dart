@@ -100,22 +100,11 @@ class _PageContentState extends State<PageContent> {
       var DATA = snap.value;
 
       getPost(KEYS,DATA);
-      
-      setState(() 
-      {
-        postsList = sortPosts(postsList);
-      });
-    });
-
-    postsRef.once().then((DataSnapshot snap)
-    {
-      var KEYS = snap.value.keys;
-      var DATA = snap.value;
-
       getPost2(KEYS,DATA);
       
       setState(() 
       {
+        postsList = sortPosts(postsList);
         postsList2 = sortPosts(postsList2);
       });
     });
@@ -164,26 +153,7 @@ class _PageContentState extends State<PageContent> {
         var KEYS = snap.value.keys;
         var DATA = snap.value;
 
-        postsList2.clear();
-
-        for(var individualKey in KEYS)
-        {
-          Posts posts = new Posts
-          (
-            DATA[individualKey]['preview'],
-            DATA[individualKey]['image'],
-            DATA[individualKey]['date'],
-            DATA[individualKey]['name'], 
-            DATA[individualKey]['post'],
-            DATA[individualKey]['time'],
-            
-          );
-
-          if(posts.name == name)
-          {
-            postsList2.add(posts);
-          }
-        }
+        getPost2(KEYS, DATA);
 
         postsList2 = sortPosts(postsList2);
       });
@@ -215,7 +185,6 @@ class _PageContentState extends State<PageContent> {
         ),
       );
     }
-
 
     else if(widget.index == 3)
     {
@@ -292,6 +261,11 @@ class _PageContentState extends State<PageContent> {
           )
         ],
       ); 
+    }
+
+    else
+    {
+      return new Spacer();
     }
   }
 }

@@ -4,10 +4,7 @@ import 'package:memoir/page_content.dart';
 import 'package:oktoast/oktoast.dart';
 import 'authentication.dart';
 import 'editor.dart';
-import 'posts.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:progressive_image/progressive_image.dart';
-
+import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 
 
 class HomePage extends StatefulWidget
@@ -28,52 +25,22 @@ class HomePage extends StatefulWidget
 
 class _HomePage extends State<HomePage>
 {
- 
-  
+  PageController _pageController;
+  String title = 'Home Page';
   int _currentIndex = 0;
-  final List<Widget> _children = 
-  [
-    PageContent(index: 1,),
-    PageContent(index: 2,),
-    PageContent(index: 3,),
-  ];
-  String name = "";
-  String bio = "";
-  String uid = "";
-  List<Posts> postsList = [];
-  var refreshKey = GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() 
   {
     super.initState();
     
-    widget.auth.getCurrentUser().then((firebaseUserID)
-    {
-      DatabaseReference userRef = FirebaseDatabase.instance.reference().child("Users");
-      userRef.once().then((DataSnapshot snap)
-      {
-        var KEYS = snap.value.keys;
-        var DATA = snap.value;
-        for(var individualKey in KEYS)
-        {
-          if (DATA[individualKey]['uid'] == firebaseUserID)
-          {
-            name = DATA[individualKey]['name'];
-            bio = DATA[individualKey]['bio'];
-            uid = DATA[individualKey]['uid'];
-            print(uid);
-          }
-        }
-      });
-    });
-
-    
-    
+    _pageController = PageController();
   }
 
- 
-
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   void _logOutUser() async
   {
@@ -88,20 +55,13 @@ class _HomePage extends State<HomePage>
     }
   }
 
-  void onTabTapped(int index) {
-   setState(() {
-     _currentIndex = index;
-   });
- }
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold
     (
-      appBar: new AppBar
+      appBar: _currentIndex == 1 ? null : new AppBar
       (
-        title: new Text("Home Page"),
+        title: new Text(title),
         actions: <Widget>
         [
           new IconButton(icon: new Icon(Icons.pets), onPressed: _logOutUser),
@@ -110,25 +70,50 @@ class _HomePage extends State<HomePage>
 
       
 
-      body: _children[_currentIndex],
+      body: new SizedBox.expand(
+        child: PageView(
+          controller: _pageController,
+          onPageChanged: (index) {
+            setState(() => _currentIndex = index);
+          },
+          children: <Widget>[
+            PageContent(index: 1,),
+            EditorPage(),
+            PageContent(index: 3,),
+          ],
+        ),
+      ),
       
       
-      bottomNavigationBar: new BottomNavigationBar
+      bottomNavigationBar: new BottomNavyBar
       (
-        onTap: onTabTapped, 
-        currentIndex: _currentIndex,
+        showElevation: true, 
+        onItemSelected: (index) => setState(() {
+                    _currentIndex = index;
+                    switch (index){
+                      case 2: title = "My Profile";
+                      break;
+                      case 1: title = "Editor";
+                      break;
+                      case 0: title = "Home Page";
+                      break;
+                    }
+                    _pageController.animateToPage(index,
+                        duration: Duration(milliseconds: 300), curve: Curves.ease);
+        }),
+        selectedIndex: _currentIndex,
         items: [
-         new BottomNavigationBarItem
+         new BottomNavyBarItem
          (
            icon: Icon(Icons.home),
-           title: Text('Home'),
+           title: new Text(title),
          ),
-         new BottomNavigationBarItem
+         new BottomNavyBarItem
          (
            icon: Icon(Icons.add_photo_alternate),
            title: Text('Post'),
          ),
-         new BottomNavigationBarItem
+         new BottomNavyBarItem
          (
            icon: Icon(Icons.account_circle),
            title: Text('Profile')

@@ -49,7 +49,7 @@ class EditorPageState extends State<EditorPage>
     return Scaffold(
       appBar: AppBar
       (
-        title: Text("Editor page"),
+        title: Text("Editor"),
         actions: <Widget>
         [
           new IconButton

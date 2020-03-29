@@ -30,10 +30,12 @@ dependencies:
   firebase_auth:
   flutter_image_compress: ^0.6.3
   dio: ^3.0.8
+  rflutter_alert: ^1.0.3
   progressive_image: ^1.0.1
   path_provider:
   bottom_navy_bar: ^5.3.2
   oktoast: ^2.3.1
+  regexed_validator: ^1.0.2
   zefyr: 
     git:
           url: git://github.com/memspace/zefyr.git

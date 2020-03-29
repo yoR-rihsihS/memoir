@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:quill_delta/quill_delta.dart';
 import 'package:zefyr/zefyr.dart';
 import 'package:progressive_image/progressive_image.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 
 
@@ -16,8 +17,9 @@ class EditorPage extends StatefulWidget
 {
   final String name;
   final String uId;
+  final VoidCallback onPostUpload;
 
-  EditorPage({this.name , this.uId});
+  EditorPage({this.name , this.uId, this.onPostUpload});
 
   @override
   EditorPageState createState() => EditorPageState();
@@ -41,6 +43,11 @@ class EditorPageState extends State<EditorPage>
     final document = _loadDocument();
     _controller = ZefyrController(document);
     _focusNode = FocusNode();
+  }
+
+  void _onPostUpdate()
+  {
+    widget.onPostUpload();
   }
 
 
@@ -86,50 +93,45 @@ class EditorPageState extends State<EditorPage>
 
   void _saveDocument(BuildContext context) async
   {
-    await showDialog
+    await Alert
     (
-      child: new SimpleDialog
-      (
-        title: new Text("Title"),
-        elevation: 20.00,
-        children: <Widget>
-        [
-          new Padding
-          (
-            padding: EdgeInsets.only(left: 10.0,right: 10.0),
-            child: new TextField
-            (
-              controller: _cont,
-              maxLines: null,
-              decoration: new InputDecoration
-              (
-                hintText: "Enter Title here!",
-              ),
+      context: context,
+      title: "POST",
+      content: Column(
+        children: <Widget>[
+          TextField(
+            maxLines: null,
+            controller: _cont,
+            decoration: InputDecoration(
+              icon: Icon(Icons.title),
+              labelText: 'Enter Title here',
             ),
           ),
-          
-          new Padding
-          (
-            padding: EdgeInsets.all(10.0),
-            child: new OutlineButton
-            (
-              child: new Text("Post"),
-              onPressed: ()
-              {
-                setState(()
-                {
-                  this.preview = _cont.text;
-                });
-                Navigator.pop(context);
-              },
-            ),
-          ),
-          
         ],
       ),
+      buttons: [
+        DialogButton(
+          onPressed: ()
+          {
+            uploadDoc();
+            setState(()
+            {
+              this.preview = _cont.text;
+            });
+            Navigator.pop(context);
+          },
+          child: Text(
+            "POST",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+        )
+      ]
+    ).show();
+  }
+  
 
-      context: context,
-    );
+  void uploadDoc() async
+  {
     final contents = jsonEncode(_controller.document);
     if (contents.contains("image"))
     {
@@ -171,10 +173,12 @@ class EditorPageState extends State<EditorPage>
     DatabaseReference ref = FirebaseDatabase.instance.reference();
     ref.child("Posts").push().set(data); 
 
-    Navigator.pop(context);
+    _onPostUpdate();
   }
-  
+
 }
+
+
 
 
 class MyAppZefyrImageDelegate implements ZefyrImageDelegate<ImageSource> 
@@ -203,7 +207,6 @@ class MyAppZefyrImageDelegate implements ZefyrImageDelegate<ImageSource>
 
       var imageUrl = await (await uploadTask.onComplete).ref.getDownloadURL();
 
-      
       return imageUrl.toString();
     }
   }

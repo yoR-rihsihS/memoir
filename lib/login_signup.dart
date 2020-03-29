@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memoir/authentication.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:regexed_validator/regexed_validator.dart';
 
 
 class Login extends StatefulWidget
@@ -101,7 +102,6 @@ class _LoginState extends State<Login>
             moveToLogin();
           });
         }
-
         widget.onSignedIn();
       }
       catch(e)
@@ -121,11 +121,13 @@ class _LoginState extends State<Login>
         centerTitle: true,
         title: new Text("Memoir"),
       ),
+
       body: new Padding
       (
         padding: EdgeInsets.all(15.0),
         child: new Form
         (
+          autovalidate: true,
           key: formKey,
           child: new Column
         (
@@ -150,17 +152,30 @@ class _LoginState extends State<Login>
           onPressed: validateAndSubmit,
         ),
 
+        new Padding(padding: EdgeInsets.all(10.0)),
 
-        new FlatButton
+        new InkWell
         (
-          child: new Text("Don't have an acoount? Sign up here!"),
-          onPressed: moveToRegister,
+          child: new Text
+          (
+            "Don't have an acoount? Sign up here!",
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.subtitle,
+          ),
+          onTap: moveToRegister,
         ),
 
-         new FlatButton
+        new Padding(padding: EdgeInsets.all(5.0)),
+
+         new InkWell
         (
-          child: new Text("Forgot Password? Reset Password here!"),
-          onPressed: moveToForgotPass,
+          child: new Text
+          (
+            "Forgot Password? Reset Password here!",
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.subtitle,
+          ),
+          onTap: moveToForgotPass,
         ),
       ];
     }
@@ -175,11 +190,17 @@ class _LoginState extends State<Login>
           onPressed: validateAndSubmit,
         ),
 
+        new Padding(padding: EdgeInsets.all(10.0)),
 
-        new FlatButton
+        new InkWell
         (
-          child: new Text("Already have an acoount? Login here!"),
-          onPressed: moveToLogin,
+          child: new Text
+          (
+            "Already have an acoount? Login here!",
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.subtitle,
+          ),
+          onTap: moveToLogin,
         ),
       ];
     }
@@ -194,17 +215,30 @@ class _LoginState extends State<Login>
           onPressed: validateAndSubmit,
         ),
 
+        new Padding(padding: EdgeInsets.all(10.0)),
 
-        new FlatButton
+        new InkWell
         (
-          child: new Text("Login here"),
-          onPressed: moveToLogin,
+          child: new Text
+          (
+            "Login here",
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.subtitle,
+          ),
+          onTap: moveToLogin,
         ),
 
-         new FlatButton
+        new Padding(padding: EdgeInsets.all(10.0)),
+
+        new InkWell
         (
-          child: new Text("Create a new account here!"),
-          onPressed: moveToRegister,
+          child: new Text
+          (
+            "Create a new account here!",
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.subtitle,
+          ),
+          onTap: moveToRegister,
         ),
       ];
     }
@@ -219,7 +253,6 @@ class _LoginState extends State<Login>
       [
         new TextFormField
         (
-          
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration
           (
@@ -229,7 +262,7 @@ class _LoginState extends State<Login>
           ),
           validator:(value)
           {
-            return value.isEmpty ? "Please enter a email adddress" : null;
+            return ! validator.email(value) ? "Please enter a valid email" : null;
           },
           onSaved: (value)
           {
@@ -255,7 +288,7 @@ class _LoginState extends State<Login>
           ),
           validator:(value)
           {
-            return value.isEmpty ? "Please enter password" : null;
+            return validator.password(value) ? "Password must contain atleast 8 characters containing capital-small letter, number and special symbol" : null;
           },
           onSaved: (value)
           {
@@ -277,12 +310,12 @@ class _LoginState extends State<Login>
           decoration: InputDecoration
           (
             prefixIcon: new Icon(Icons.person_outline),
-            labelText: "Name",
+            labelText: "Name Example",
             border: OutlineInputBorder(),
           ),
           validator: (value)
           {
-            return value.length < 3 ? "Please enter a valid name" : null;
+            return ! validator.name(value) ? "Please enter a valid name" : null;
           },
           onSaved: (value)
           {
@@ -300,14 +333,14 @@ class _LoginState extends State<Login>
           keyboardType: TextInputType.datetime,
           decoration: InputDecoration
           (
-            hintText: "25/07/1999",
+            hintText: "1999/07-25",
             prefixIcon: new Icon(Icons.calendar_today),
             labelText: "Date Of Birth",
             border: OutlineInputBorder(),
           ),
           validator: (value)
           {
-            return null;
+            return ! validator.date(value) ? "Please enter a valid date" : null;
           },
           onSaved: (value)
           {
@@ -332,7 +365,7 @@ class _LoginState extends State<Login>
           ),
           validator:(value)
           {
-            return value.isEmpty ? "Please enter a email adddress" : null;
+            return ! validator.email(value) ? "Please enter a valid email" : null;
           },
           onSaved: (value)
           {
@@ -358,7 +391,7 @@ class _LoginState extends State<Login>
             ),
             validator:(value)
             {
-              return value.isEmpty ? "Please enter password" : null;
+            return ! validator.password(value) ? "Password must contain atleast 8 characters containing capital-small letter, number and special symbol" : null;
             },
             onSaved: (value)
             {
@@ -389,7 +422,7 @@ class _LoginState extends State<Login>
           ),
           validator:(value)
           {
-            return value.isEmpty ? "Please enter a email adddress" : null;
+            return ! validator.email(value) ? "Please enter a valid email" : null;
           },
           onSaved: (value)
           {

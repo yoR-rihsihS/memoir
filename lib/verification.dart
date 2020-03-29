@@ -25,7 +25,7 @@ class VerificationScreen extends StatelessWidget
       (
         child: new FlatButton
         (
-          child: new Text("Verification Email sent to your Mail. Tap to Login!"),
+          child: new Text("Tap to go to Login Page!"),
           onPressed: onVerification,
         ),
       ),

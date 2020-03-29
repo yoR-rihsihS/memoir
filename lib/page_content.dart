@@ -6,19 +6,19 @@ import 'posts.dart';
 
 
 class PageContent extends StatefulWidget {
-  PageContent({this.index,this.auth});
+  PageContent({this.index});
 
   final int index;
-  final AuthImplementation auth;
 
   @override
   _PageContentState createState() => _PageContentState();
 }
 
 class _PageContentState extends State<PageContent> {
-  String name = "";
-  String bio = "";
-  String uid = "";
+  String name;
+  String bio;
+  String uid;
+  String propic;
   AuthImplementation autth = new Auth();
   DatabaseReference postsRef = FirebaseDatabase.instance.reference().child("Posts");
   List<Posts> postsList = [];
@@ -40,7 +40,7 @@ class _PageContentState extends State<PageContent> {
         DATA[individualKey]['name'],
         DATA[individualKey]['post'],
         DATA[individualKey]['time'],
-        
+        DATA[individualKey]['uid'],
       );
       postsList.add(posts);
     }
@@ -60,9 +60,9 @@ class _PageContentState extends State<PageContent> {
         DATA[individualKey]['name'],
         DATA[individualKey]['post'],
         DATA[individualKey]['time'],
-        
+        DATA[individualKey]['uid'],
       );
-      if(posts.name == name)
+      if(posts.uid == uid)
       {
         postsList2.add(posts);
       }
@@ -88,6 +88,7 @@ class _PageContentState extends State<PageContent> {
             name = DATA[individualKey]['name'];
             bio = DATA[individualKey]['bio'];
             uid = DATA[individualKey]['uid'];
+            propic = DATA[individualKey]['propic'];
           }
         }
       });
@@ -188,8 +189,6 @@ class _PageContentState extends State<PageContent> {
 
     else if(widget.index == 3)
     {
-      
-    
       return new Column
       (
         mainAxisAlignment: MainAxisAlignment.start,
@@ -204,34 +203,68 @@ class _PageContentState extends State<PageContent> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>
               [
-                new Padding
+                new Align
                 (
-                  padding: EdgeInsets.all(20.0),
-                  child: new CircleAvatar
+                  child: new SizedBox
                   (
-                    radius: 60.0,
-                    child: new Icon
+                    height: 150,
+                    width: 150,
+                    child: new Padding
                     (
-                      Icons.person_outline,
-                      size: 80.0,
+                      padding: EdgeInsets.all(10.0),
+                      child: new CircleAvatar
+                      (
+                        radius: 21,
+                        backgroundColor: Colors.blue[400],
+                        child: propic == null ? new Icon(Icons.person, size: 100.0,) : new CircleAvatar(
+                          radius: 61,
+                          backgroundImage: NetworkImage(propic),
+                          backgroundColor: Colors.transparent,
+                          foregroundColor: Colors.transparent,
+                        ),
+                      ),
                     ),
-                    backgroundColor: Colors.blueGrey,
                   ),
                 ),
-                new Padding
+                new Column
                 (
-                  padding: const EdgeInsets.only
-                  (
-                    left: 20.0,
-                    right: 20.0,
-                    top: 20.0,
-                    bottom: 20.0,
-                  ),
-                  child: bio == null ? new Text("Bio is empty") : new Text
-                  (
-                    bio,
-                    maxLines: null,
-                  ),
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>
+                  [
+                    new Padding
+                    (
+                      padding: const EdgeInsets.only
+                      (
+                        left: 20.0,
+                        right: 20.0,
+                        top: 20.0,
+                        bottom: 5.0,
+                      ),
+                      child: name == null ? new Text("Name is empty") : new Text
+                      (
+                        name,
+                        textAlign: TextAlign.left,
+                        style: Theme.of(context).textTheme.title,
+                        maxLines: null,
+                      ),
+                    ),
+                    new Padding
+                    (
+                      padding: const EdgeInsets.only
+                      (
+                        left: 20.0,
+                        right: 20.0,
+                        top: 5.0,
+                        bottom: 20.0,
+                      ),
+                      child: bio == null ? new Text("Bio is empty", textAlign: TextAlign.left,) : new Text
+                      (
+                        bio,
+                        textAlign: TextAlign.left,
+                        maxLines: null,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

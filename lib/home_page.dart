@@ -1,6 +1,8 @@
 import 'dart:ui';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:memoir/page_content.dart';
+import 'package:memoir/profile_edit.dart';
 import 'package:oktoast/oktoast.dart';
 import 'authentication.dart';
 import 'editor.dart';
@@ -23,17 +25,57 @@ class HomePage extends StatefulWidget
   }
 }
 
+
 class _HomePage extends State<HomePage>
 {
   PageController _pageController;
   String title = 'Home Page';
   int _currentIndex = 0;
+  String name = "";
+  String uid = "";
+  String dob = "";
+  String propic = "";
+  String bio = "";
+  String mobile = "";
+  String email = "";
+
+
+  void postUpload()
+  {
+    setState(() {
+      _currentIndex = 0;
+      _pageController.animateToPage(_currentIndex, duration: Duration(milliseconds: 300), curve: Curves.ease);
+    });
+  }
+
 
   @override
   void initState() 
   {
     super.initState();
     
+    widget.auth.getCurrentUser().then((firebaseUserID)
+    {
+      DatabaseReference userRef = FirebaseDatabase.instance.reference().child("Users");
+      userRef.once().then((DataSnapshot snap)
+      {
+        var KEYS = snap.value.keys;
+        var DATA = snap.value;
+        for(var individualKey in KEYS)
+        {
+          if (DATA[individualKey]['uid'] == firebaseUserID)
+          {
+            name = DATA[individualKey]['name'];
+            uid = DATA[individualKey]['uid'];
+            dob = DATA[individualKey]['dob'];
+            propic = DATA[individualKey]['propic'];
+            mobile = DATA[individualKey]['mobile'];
+            bio = DATA[individualKey]['bio'];
+          }
+        }
+      });
+    });
+
     _pageController = PageController();
   }
 
@@ -64,6 +106,21 @@ class _HomePage extends State<HomePage>
         title: new Text(title),
         actions: <Widget>
         [
+          new IconButton(icon: new Icon(Icons.edit), onPressed: (){
+            Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ProfileEdit
+            (
+              auth: widget.auth,
+              uid: uid,
+              name: name,
+              propic: propic,
+              mobile: mobile,
+              dob: dob,
+              bio: bio,)
+            ),
+          );
+          }),
           new IconButton(icon: new Icon(Icons.pets), onPressed: _logOutUser),
         ],
       ),
@@ -78,7 +135,7 @@ class _HomePage extends State<HomePage>
           },
           children: <Widget>[
             PageContent(index: 1,),
-            EditorPage(),
+            EditorPage(name: name, uId: uid, onPostUpload: postUpload,),
             PageContent(index: 3,),
           ],
         ),

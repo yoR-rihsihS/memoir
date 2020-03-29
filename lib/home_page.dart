@@ -75,7 +75,6 @@ class _HomePage extends State<HomePage>
         }
       });
     });
-
     _pageController = PageController();
   }
 
@@ -117,15 +116,14 @@ class _HomePage extends State<HomePage>
               propic: propic,
               mobile: mobile,
               dob: dob,
-              bio: bio,)
+              bio: bio,
+            )
             ),
           );
           }),
           new IconButton(icon: new Icon(Icons.pets), onPressed: _logOutUser),
         ],
       ),
-
-      
 
       body: new SizedBox.expand(
         child: PageView(

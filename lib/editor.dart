@@ -143,22 +143,16 @@ class EditorPageState extends State<EditorPage>
     }
     final file = File(Directory.systemTemp.path + "/quick_start.json");
     final StorageReference postImageRef = FirebaseStorage.instance.ref().child("Posts");
-
     var timeKey = new DateTime.now();
     File post = await file.writeAsString(contents);
     final StorageUploadTask uploadTask = postImageRef.child(timeKey.toString() + ".json").putFile(post);
-  
     var postUrl = await (await uploadTask.onComplete).ref.getDownloadURL();
-
     _url = postUrl.toString();
-
     var dbTimeKey = new DateTime.now();
     var formatDate = new DateFormat('d, M, y');
     var formatTime = new DateFormat('H:m');
-
     String date = formatDate.format(dbTimeKey);
     String time = formatTime.format(dbTimeKey);
-
     var data = 
     {
       "preview" : preview,
@@ -169,10 +163,8 @@ class EditorPageState extends State<EditorPage>
       "time" : time,
       "name" : widget.name,
     };
-
     DatabaseReference ref = FirebaseDatabase.instance.reference();
     ref.child("Posts").push().set(data); 
-
     _onPostUpdate();
   }
 
@@ -200,17 +192,12 @@ class MyAppZefyrImageDelegate implements ZefyrImageDelegate<ImageSource>
       );
       file.writeAsBytes(result, flush: true, mode: FileMode.write);
       final StorageReference postImageRef = FirebaseStorage.instance.ref().child("Images");
-
       var timeKey = new DateTime.now();
-
       final StorageUploadTask uploadTask = postImageRef.child(timeKey.toString() + ".jpg").putFile(file);
-
       var imageUrl = await (await uploadTask.onComplete).ref.getDownloadURL();
-
       return imageUrl.toString();
     }
   }
-
 
   @override
   Widget buildImage(BuildContext context, String key) 
@@ -227,10 +214,8 @@ class MyAppZefyrImageDelegate implements ZefyrImageDelegate<ImageSource>
     );
   }
 
-
   @override
   ImageSource get cameraSource => ImageSource.camera;
-
 
   @override
   ImageSource get gallerySource => ImageSource.gallery;

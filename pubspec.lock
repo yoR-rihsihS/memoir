@@ -374,12 +374,10 @@ packages:
   zefyr:
     dependency: "direct main"
     description:
-      path: "packages/zefyr"
-      ref: fix-text-input-connection-closed
-      resolved-ref: "0fabb4fdbb5ff3bcfff5f7831597ee31579beaf0"
-      url: "git://github.com/memspace/zefyr.git"
-    source: git
-    version: "0.8.0"
+      name: zefyr
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.10.0"
 sdks:
   dart: ">2.4.0 <3.0.0"
   flutter: ">=1.12.8 <2.0.0"

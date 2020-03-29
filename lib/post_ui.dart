@@ -47,7 +47,7 @@ class PostUI
               (
                 placeholder: AssetImage("assets/placeholder.jpg"),
                 thumbnail: AssetImage("assets/placeholder.jpg"),
-                image: image == null ? AssetImage("assets/placeholder.jpg") : NetworkImage(image),
+                image: (image == null || image == "") ? AssetImage("assets/noimage.jpg") : NetworkImage(image),
                 blur: 10,
                 width: 400,
                 height: 400,

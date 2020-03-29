@@ -132,10 +132,19 @@ class EditorPageState extends State<EditorPage>
 
   void uploadDoc() async
   {
+    String fCheck;
     final contents = jsonEncode(_controller.document);
     if (contents.contains("image"))
     {
-      image = contents.substring(contents.indexOf("https") , contents.indexOf("}}}") - 1);
+      fCheck = contents.substring(contents.indexOf("image") + 17, contents.indexOf("}}}") - 1);
+      if (fCheck.contains("https"))
+      {
+        image = fCheck;
+      }
+      else
+      {
+        image = null;
+      }
     }
     else
     {

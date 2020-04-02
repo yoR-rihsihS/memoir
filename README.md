@@ -1,6 +1,6 @@
 # memoir
 
-A new Flutter project.
+A demo Flutter Project.
 
 ## Getting Started
 

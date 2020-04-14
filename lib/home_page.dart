@@ -102,10 +102,11 @@ class _HomePage extends State<HomePage>
     (
       appBar: _currentIndex == 1 ? null : new AppBar
       (
-        title: new Text(title),
+        backgroundColor: Color(0xff292826),
+        title: new Text(title, style: TextStyle(color: Color(0xfff9d342)),),
         actions: <Widget>
         [
-          new IconButton(icon: new Icon(Icons.edit), onPressed: (){
+          new IconButton(icon: new Icon(Icons.edit, color: Color(0xfff9d342),), onPressed: (){
             Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => ProfileEdit
@@ -121,7 +122,7 @@ class _HomePage extends State<HomePage>
             ),
           );
           }),
-          new IconButton(icon: new Icon(Icons.pets), onPressed: _logOutUser),
+          new IconButton(icon: new Icon(Icons.pets, color: Color(0xfff9d342),), onPressed: _logOutUser),
         ],
       ),
 
@@ -142,6 +143,7 @@ class _HomePage extends State<HomePage>
       
       bottomNavigationBar: new BottomNavyBar
       (
+        backgroundColor: Color(0xff292826),
         showElevation: true, 
         onItemSelected: (index) => setState(() {
                     _currentIndex = index;
@@ -160,18 +162,24 @@ class _HomePage extends State<HomePage>
         items: [
          new BottomNavyBarItem
          (
-           icon: Icon(Icons.home),
-           title: new Text(title),
+           inactiveColor: Color(0xfff9d342),
+           activeColor: Color(0xfff9d342),
+           icon: Icon(Icons.home, color: Color(0xfff9d342),),
+           title: new Text(title, style: TextStyle(color: Color(0xfff9d342)),),
          ),
          new BottomNavyBarItem
          (
-           icon: Icon(Icons.add_photo_alternate),
-           title: Text('Post'),
+           inactiveColor: Color(0xfff9d342),
+           activeColor: Color(0xfff9d342),
+           icon: Icon(Icons.add_photo_alternate, color: Color(0xfff9d342),),
+           title: Text(title, style: TextStyle(color: Color(0xfff9d342)),),
          ),
          new BottomNavyBarItem
          (
-           icon: Icon(Icons.account_circle),
-           title: Text('Profile')
+           inactiveColor: Color(0xfff9d342),
+           activeColor: Color(0xfff9d342),
+           icon: Icon(Icons.account_circle, color: Color(0xfff9d342),),
+           title: Text(title, style: TextStyle(color: Color(0xfff9d342)),)
          )
        ], 
       ),

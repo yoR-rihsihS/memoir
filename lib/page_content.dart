@@ -40,28 +40,9 @@ class _PageContentState extends State<PageContent> {
         DATA[individualKey]['name'],
         DATA[individualKey]['post'],
         DATA[individualKey]['time'],
-        DATA[individualKey]['uid'],
+        DATA[individualKey]['uId'],
       );
       postsList.add(posts);
-    }
-  }
-
-  void getPost2(var KEYS, var DATA)
-  {
-    postsList2.clear();
-
-    for(var individualKey in KEYS)
-    {
-      Posts posts = new Posts
-      (
-        DATA[individualKey]['preview'],
-        DATA[individualKey]['image'],
-        DATA[individualKey]['date'], 
-        DATA[individualKey]['name'],
-        DATA[individualKey]['post'],
-        DATA[individualKey]['time'],
-        DATA[individualKey]['uid'],
-      );
       if(posts.uid == uid)
       {
         postsList2.add(posts);
@@ -69,13 +50,14 @@ class _PageContentState extends State<PageContent> {
     }
   }
 
+
   @override
   void initState() {
     super.initState();
 
-    
     autth.getCurrentUser().then((firebaseUserID)
     {
+      uid = firebaseUserID;
       DatabaseReference userRef = FirebaseDatabase.instance.reference().child("Users");
       userRef.once().then((DataSnapshot snap)
       {
@@ -87,7 +69,6 @@ class _PageContentState extends State<PageContent> {
           {
             name = DATA[individualKey]['name'];
             bio = DATA[individualKey]['bio'];
-            uid = DATA[individualKey]['uid'];
             propic = DATA[individualKey]['propic'];
           }
         }
@@ -101,7 +82,6 @@ class _PageContentState extends State<PageContent> {
       var DATA = snap.value;
 
       getPost(KEYS,DATA);
-      getPost2(KEYS,DATA);
       
       setState(() 
       {
@@ -154,7 +134,7 @@ class _PageContentState extends State<PageContent> {
         var KEYS = snap.value.keys;
         var DATA = snap.value;
 
-        getPost2(KEYS, DATA);
+        getPost(KEYS, DATA);
 
         postsList2 = sortPosts(postsList2);
       });
@@ -189,112 +169,27 @@ class _PageContentState extends State<PageContent> {
 
     else if(widget.index == 3)
     {
-      return new Column
-      (
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>
-        [
-          new Card
+      return new Container
+        (
+          child: new RefreshIndicator
           (
-            elevation: 10.0,
-            margin: EdgeInsets.only(top:10.0, left:10.0, right:10.0),
-            child: new Row
+            key: refreshKey2,
+            onRefresh: refreshList2,
+            child: new ListView.builder
             (
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>
-              [
-                new Align
-                (
-                  child: new SizedBox
-                  (
-                    height: 150,
-                    width: 150,
-                    child: new Padding
-                    (
-                      padding: EdgeInsets.all(10.0),
-                      child: new CircleAvatar
-                      (
-                        radius: 21,
-                        backgroundColor: Colors.blue[400],
-                        child: propic == null ? new Icon(Icons.person, size: 100.0,) : new CircleAvatar(
-                          radius: 61,
-                          backgroundImage: NetworkImage(propic),
-                          backgroundColor: Colors.transparent,
-                          foregroundColor: Colors.transparent,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                new Column
-                (
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>
-                  [
-                    new Padding
-                    (
-                      padding: const EdgeInsets.only
-                      (
-                        left: 20.0,
-                        right: 20.0,
-                        top: 20.0,
-                        bottom: 5.0,
-                      ),
-                      child: name == null ? new Text("Name is empty") : new Text
-                      (
-                        name,
-                        textAlign: TextAlign.left,
-                        style: Theme.of(context).textTheme.title,
-                        maxLines: null,
-                      ),
-                    ),
-                    new Padding
-                    (
-                      padding: const EdgeInsets.only
-                      (
-                        left: 20.0,
-                        right: 20.0,
-                        top: 5.0,
-                        bottom: 20.0,
-                      ),
-                      child: bio == null ? new Text("Bio is empty", textAlign: TextAlign.left,) : new Text
-                      (
-                        bio,
-                        textAlign: TextAlign.left,
-                        maxLines: null,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+              itemCount: postsList2.length+1,
+              itemBuilder: (context, index)
+              {
+                return (index == 0)
+                ? ProfileUI().profileUI(name, bio, propic, context)
+                : PostUI().postsUI(postsList2[index-1].preview, postsList2[index-1].image, postsList2[index-1].date, postsList2[index-1].name, postsList2[index-1].post, postsList2[index-1].time, context);
+              },
             ),
           ),
-          
-          new Center
-          (
-            child: new Container
-            (
-              height: 465.7,
-              child: new RefreshIndicator
-              (
-                key: refreshKey2,
-                onRefresh: refreshList2,
-                child: postsList2.length == 0 ? new Text("No Posts available") : new ListView.builder
-                (
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: postsList2.length,
-                  itemBuilder: (context, index)
-                  {
-                    return PostUI().postsUI(postsList2[index].preview, postsList2[index].image, postsList2[index].date, postsList2[index].name, postsList2[index].post, postsList2[index].time, context);
-                  },
-                ),
-              ),
-            ),
-          )
-        ],
-      ); 
+        );
     }
+
+
 
     else
     {

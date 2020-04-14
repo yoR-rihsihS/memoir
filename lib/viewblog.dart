@@ -39,8 +39,8 @@ class _ViewPageState extends State<ViewPage>
     return Scaffold(
       appBar: new AppBar
       (
-        title: Text("Read Blog"),
-
+        backgroundColor: Color(0xff292826),
+        title: Text("Read Blog", style: TextStyle(color: Color(0xfff9d342)),),
       ),
       body: new Padding
       (

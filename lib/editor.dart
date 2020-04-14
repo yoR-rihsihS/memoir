@@ -56,12 +56,13 @@ class EditorPageState extends State<EditorPage>
     return Scaffold(
       appBar: AppBar
       (
-        title: Text("Editor"),
+        backgroundColor: Color(0xff292826),
+        title: Text("Editor", style: TextStyle(color: Color(0xfff9d342)),),
         actions: <Widget>
         [
           new IconButton
           (
-            icon: Icon(Icons.library_books),
+            icon: Icon(Icons.library_books, color: Color(0xfff9d342),),
             onPressed: ()
             {
               setState(() {
@@ -103,14 +104,20 @@ class EditorPageState extends State<EditorPage>
             maxLines: null,
             controller: _cont,
             decoration: InputDecoration(
-              icon: Icon(Icons.title),
+              prefixIcon: Icon(Icons.title, color: Color(0xff292826),),
               labelText: 'Enter Title here',
+              labelStyle: TextStyle(color: Color(0xff292826)),
+              border: OutlineInputBorder
+              (
+                borderRadius: BorderRadius.circular(20.0),
+              ),
             ),
           ),
         ],
       ),
       buttons: [
         DialogButton(
+          color: Color(0xff292826),
           onPressed: ()
           {
             uploadDoc();
@@ -122,7 +129,7 @@ class EditorPageState extends State<EditorPage>
           },
           child: Text(
             "POST",
-            style: TextStyle(color: Colors.white, fontSize: 20),
+            style: TextStyle(color: Color(0xfff9d342), fontSize: 20),
           ),
         )
       ]

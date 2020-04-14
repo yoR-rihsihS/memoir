@@ -9,6 +9,10 @@ class PostUI
   {
     return new Card
     (
+      shape: RoundedRectangleBorder
+      (
+        borderRadius: BorderRadius.circular(20.0),
+      ),
       elevation: 10.0,
       margin: EdgeInsets.all(10.0),
       child: new InkWell
@@ -85,6 +89,95 @@ class PostUI
             ],
           ),
         )
+      ),
+    );
+  }
+}
+
+
+
+
+class ProfileUI
+{
+  Widget profileUI(String name, String bio, String propic, BuildContext context)
+  {
+    return new Card
+    (
+      shape: RoundedRectangleBorder
+      (
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      elevation: 10.0,
+      margin: EdgeInsets.only(top:10.0, left:10.0, right:10.0),
+      child: new Row
+      (
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>
+        [
+          new Align
+          (
+            child: new SizedBox
+            (
+              height: 150,
+              width: 150,
+              child: new Padding
+              (
+                padding: EdgeInsets.all(10.0),
+                child: new CircleAvatar
+                (
+                  radius: 21,
+                  backgroundColor: Color(0xff292826),
+                  child: propic == null ? new Icon(Icons.person, size: 100.0,) : new CircleAvatar(
+                    radius: 61,
+                    backgroundImage: NetworkImage(propic),
+                    backgroundColor: Colors.transparent,
+                    foregroundColor: Colors.transparent,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          new Column
+          (
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>
+            [
+              new Padding
+              (
+                padding: const EdgeInsets.only
+                (
+                  left: 20.0,
+                  right: 20.0,
+                  top: 20.0,
+                  bottom: 5.0,
+                ),
+                child: name == null ? new Text("Name is empty") : new Text
+                (
+                  name,
+                  textAlign: TextAlign.left,
+                  style: Theme.of(context).textTheme.title,
+                  maxLines: null,
+                ),
+              ),
+              new Padding
+              (
+                padding: const EdgeInsets.only
+                (
+                  left: 20.0,
+                  right: 20.0,
+                  top: 5.0,
+                  bottom: 20.0,
+                ),
+                child: bio == null ? new Text("Bio is empty", textAlign: TextAlign.left,) : new Text
+                (
+                  bio,
+                  textAlign: TextAlign.left,
+                  maxLines: null,
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

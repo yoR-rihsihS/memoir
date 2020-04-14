@@ -113,28 +113,53 @@ class _LoginState extends State<Login>
 
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold
+  Widget build(BuildContext context) 
+  {
+    return new Container
     (
-      appBar: new AppBar
+      color: Color(0xFF292826),
+      child: Center
       (
-        centerTitle: true,
-        title: new Text("Memoir"),
-      ),
+        child: Column
+        (
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>
+          [
+            Image.asset
+            (
+              "assets/logo.png",
+              height: 250.0,
+              width: 250.0,
+            ),
 
-      body: new Padding
-      (
-        padding: EdgeInsets.all(15.0),
-        child: new Form
-        (
-          autovalidate: true,
-          key: formKey,
-          child: new Column
-        (
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: createForm() + createButton()
+            new Container
+            (
+              width: 500.0,
+              child: new Card
+              (
+                shape: RoundedRectangleBorder
+                (
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                elevation: 10.0,
+                child: Padding
+                (
+                  padding: EdgeInsets.all(10.0),
+                  child: new Form
+                  (
+                    autovalidate: true,
+                    key: formKey,
+                    child: new Column
+                    (
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: createForm() + createButton()
+                    ),
+                  ),
+                )
+              ),
+            )
+          ],
         ),
-        )
       ),
     );
   }
@@ -147,12 +172,23 @@ class _LoginState extends State<Login>
       [
         new RaisedButton
         (
-          child: new Text("Login"),
-          color: Color(0XFF4FC3F7),
+          shape: RoundedRectangleBorder
+          (
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          child: new Text
+          (
+            "Login",
+            style: TextStyle
+            (
+              color: Color(0XFFf9d342),
+            ),
+          ),
+          color: Color(0XFF292826),
           onPressed: validateAndSubmit,
         ),
 
-        new Padding(padding: EdgeInsets.all(10.0)),
+        new Padding(padding: EdgeInsets.all(5.0)),
 
         new InkWell
         (
@@ -160,7 +196,12 @@ class _LoginState extends State<Login>
           (
             "Don't have an acoount? Sign up here!",
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.subtitle,
+            style: TextStyle
+            (
+              color: Color(0xff292826),
+              fontWeight: FontWeight.bold,
+              fontSize: 15.0,
+            ),
           ),
           onTap: moveToRegister,
         ),
@@ -173,7 +214,12 @@ class _LoginState extends State<Login>
           (
             "Forgot Password? Reset Password here!",
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.subtitle,
+            style: TextStyle
+            (
+              color: Color(0xff292826),
+              fontWeight: FontWeight.bold,
+              fontSize: 15.0,
+            ),
           ),
           onTap: moveToForgotPass,
         ),
@@ -185,12 +231,23 @@ class _LoginState extends State<Login>
       [
         new RaisedButton
         (
-          child: new Text("Sign Up"),
-          color: Color(0XFF4FC3F7),
+          shape: RoundedRectangleBorder
+          (
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          child: new Text
+          (
+            "Sign Up",
+            style: TextStyle
+            (
+              color: Color(0XFFf9d342),
+            ),
+          ),
+          color: Color(0XFF292826),
           onPressed: validateAndSubmit,
         ),
 
-        new Padding(padding: EdgeInsets.all(10.0)),
+        new Padding(padding: EdgeInsets.all(5.0)),
 
         new InkWell
         (
@@ -198,7 +255,12 @@ class _LoginState extends State<Login>
           (
             "Already have an acoount? Login here!",
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.subtitle,
+            style: TextStyle
+            (
+              color: Color(0xff292826),
+              fontWeight: FontWeight.bold,
+              fontSize: 15.0,
+            ),
           ),
           onTap: moveToLogin,
         ),
@@ -210,12 +272,23 @@ class _LoginState extends State<Login>
       [
         new RaisedButton
         (
-          child: new Text("Reset Password"),
-          color: Color(0XFF4FC3F7),
+          shape: RoundedRectangleBorder
+          (
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          child: new Text
+          (
+            "Reset Password",
+            style: TextStyle
+            (
+              color: Color(0XFFf9d342),
+            ),
+          ),
+          color: Color(0XFF292826),
           onPressed: validateAndSubmit,
         ),
 
-        new Padding(padding: EdgeInsets.all(10.0)),
+        new Padding(padding: EdgeInsets.all(5.0)),
 
         new InkWell
         (
@@ -223,12 +296,17 @@ class _LoginState extends State<Login>
           (
             "Login here",
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.subtitle,
+            style: TextStyle
+            (
+              color: Color(0xff292826),
+              fontWeight: FontWeight.bold,
+              fontSize: 15.0,
+            ),
           ),
           onTap: moveToLogin,
         ),
 
-        new Padding(padding: EdgeInsets.all(10.0)),
+        new Padding(padding: EdgeInsets.all(5.0)),
 
         new InkWell
         (
@@ -236,7 +314,12 @@ class _LoginState extends State<Login>
           (
             "Create a new account here!",
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.subtitle,
+            style: TextStyle
+            (
+              color: Color(0xff292826),
+              fontWeight: FontWeight.bold,
+              fontSize: 15.0,
+            ),
           ),
           onTap: moveToRegister,
         ),
@@ -256,9 +339,12 @@ class _LoginState extends State<Login>
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration
           (
-            prefixIcon: new Icon(Icons.mail_outline),
+            prefixIcon: new Icon(Icons.mail_outline, color: Color(0xff292826),),
             labelText: "E-mail",
-            border: OutlineInputBorder(),
+            border: OutlineInputBorder
+            (
+              borderRadius: BorderRadius.circular(20.0),
+            ),
           ),
           validator:(value)
           {
@@ -273,7 +359,7 @@ class _LoginState extends State<Login>
 
         new Padding
         (
-          padding: EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0)
+          padding: EdgeInsets.all(5.0),
         ),
 
 
@@ -282,13 +368,16 @@ class _LoginState extends State<Login>
           obscureText: true,
           decoration: InputDecoration
           (
-            prefixIcon: new Icon(Icons.lock_outline),
+            prefixIcon: new Icon(Icons.lock_outline, color: Color(0xff292826),),
             labelText: "Password",
-            border: OutlineInputBorder(),
+            border: OutlineInputBorder
+            (
+              borderRadius: BorderRadius.circular(20.0),
+            ),
           ),
           validator:(value)
           {
-            return validator.password(value) ? "Password must contain atleast 8 characters containing capital-small letter, number and special symbol" : null;
+            return ! validator.password(value) ? "Password must contain atleast 8 characters containing capital-small letter, number and special symbol" : null;
           },
           onSaved: (value)
           {
@@ -309,9 +398,12 @@ class _LoginState extends State<Login>
         (
           decoration: InputDecoration
           (
-            prefixIcon: new Icon(Icons.person_outline),
+            prefixIcon: new Icon(Icons.person_outline, color: Color(0xff292826),),
             labelText: "Name Example",
-            border: OutlineInputBorder(),
+            border: OutlineInputBorder
+            (
+              borderRadius: BorderRadius.circular(20.0),
+            ),
           ),
           validator: (value)
           {
@@ -325,7 +417,7 @@ class _LoginState extends State<Login>
 
         new Padding
         (
-          padding: EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0)
+          padding: EdgeInsets.all(5.0)
         ),
 
         new TextFormField
@@ -334,9 +426,12 @@ class _LoginState extends State<Login>
           decoration: InputDecoration
           (
             hintText: "1999/07-25",
-            prefixIcon: new Icon(Icons.calendar_today),
+            prefixIcon: new Icon(Icons.calendar_today, color: Color(0xff292826),),
             labelText: "Date Of Birth",
-            border: OutlineInputBorder(),
+            border: OutlineInputBorder
+            (
+              borderRadius: BorderRadius.circular(20.0),
+            ),
           ),
           validator: (value)
           {
@@ -351,7 +446,7 @@ class _LoginState extends State<Login>
 
         new Padding
         (
-          padding: EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0)
+          padding: EdgeInsets.all(5.0)
         ),
 
         new TextFormField
@@ -359,9 +454,12 @@ class _LoginState extends State<Login>
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration
           (
-            prefixIcon: new Icon(Icons.mail_outline),
+            prefixIcon: new Icon(Icons.mail_outline, color: Color(0xff292826),),
             labelText: "E-mail",
-            border: OutlineInputBorder(),
+            border: OutlineInputBorder
+            (
+              borderRadius: BorderRadius.circular(20.0),
+            ),
           ),
           validator:(value)
           {
@@ -376,7 +474,7 @@ class _LoginState extends State<Login>
 
           new Padding
           (
-            padding: EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0)
+            padding: EdgeInsets.all(5.0)
           ),
 
 
@@ -385,9 +483,12 @@ class _LoginState extends State<Login>
             obscureText: true,
             decoration: InputDecoration
             (
-              prefixIcon: new Icon(Icons.lock_outline),
+              prefixIcon: new Icon(Icons.lock_outline, color: Color(0xff292826),),
               labelText: "Password",
-              border: OutlineInputBorder(),
+              border: OutlineInputBorder
+              (
+                borderRadius: BorderRadius.circular(20.0),
+              ),
             ),
             validator:(value)
             {
@@ -402,7 +503,7 @@ class _LoginState extends State<Login>
 
           new Padding
           (
-           padding: EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0)
+           padding: EdgeInsets.all(5.0)
           ),
       ];
     }
@@ -416,9 +517,12 @@ class _LoginState extends State<Login>
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration
           (
-            prefixIcon: new Icon(Icons.mail_outline),
+            prefixIcon: new Icon(Icons.mail_outline, color: Color(0xff292826),),
             labelText: "E-mail",
-            border: OutlineInputBorder(),
+            border: OutlineInputBorder
+            (
+              borderRadius: BorderRadius.circular(20.0),
+            ),
           ),
           validator:(value)
           {

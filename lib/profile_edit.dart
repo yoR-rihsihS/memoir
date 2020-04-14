@@ -144,10 +144,11 @@ class _ProfileEditState extends State<ProfileEdit> {
     (
       appBar: new AppBar
       (
-        title: Text("Edit Profile"),
+        backgroundColor: Color(0xff292826),
+        title: Text("Edit Profile", style: TextStyle(color: Color(0xfff9d342)),),
         actions: <Widget>
         [
-          IconButton(icon: Icon(Icons.done), onPressed: validateAndSubmit),
+          IconButton(icon: Icon(Icons.done, color: Color(0xfff9d342)), onPressed: validateAndSubmit),
         ],
       ),
 
@@ -169,8 +170,8 @@ class _ProfileEditState extends State<ProfileEdit> {
                 child: new CircleAvatar
                 (
                   radius: 80.5,
-                  backgroundColor: Colors.blue[400],
-                  child: propic == null ? new Icon(Icons.person, size: 150.0,) : new CircleAvatar
+                  backgroundColor: Color(0xff292826),
+                  child: propic == null ? new Icon(Icons.person, size: 150.0, color: Color(0xfff9d342),) : new CircleAvatar
                   (
                     radius: 80,
                     backgroundImage: NetworkImage(propic),
@@ -187,7 +188,7 @@ class _ProfileEditState extends State<ProfileEdit> {
             child: new InkWell
             (
               focusColor: Colors.blue,
-              child: new Text("Upload a new photo", style: TextStyle(color: Colors.blueAccent),),
+              child: new Text("Upload a new photo", style: TextStyle(color: Color(0xff292826)),),
               onTap: setProPic,
             ),
           ),

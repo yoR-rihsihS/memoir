@@ -132,9 +132,12 @@ class _LoginState extends State<Login>
               width: 250.0,
             ),
 
-            new Container
+            new Padding
             (
-              width: 500.0,
+              padding: EdgeInsets.only(
+                left: 20.0,
+                right: 20.0,
+              ),
               child: new Card
               (
                 shape: RoundedRectangleBorder
@@ -194,7 +197,7 @@ class _LoginState extends State<Login>
         (
           child: new Text
           (
-            "Don't have an acoount? Sign up here!",
+            "Don't have an acoount?",
             textAlign: TextAlign.center,
             style: TextStyle
             (
@@ -212,7 +215,7 @@ class _LoginState extends State<Login>
         (
           child: new Text
           (
-            "Forgot Password? Reset Password here!",
+            "Forgot Password?",
             textAlign: TextAlign.center,
             style: TextStyle
             (
@@ -253,7 +256,7 @@ class _LoginState extends State<Login>
         (
           child: new Text
           (
-            "Already have an acoount? Login here!",
+            "Already have an acoount?",
             textAlign: TextAlign.center,
             style: TextStyle
             (
@@ -294,7 +297,7 @@ class _LoginState extends State<Login>
         (
           child: new Text
           (
-            "Login here",
+            "Login here!",
             textAlign: TextAlign.center,
             style: TextStyle
             (

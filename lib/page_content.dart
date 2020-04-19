@@ -29,6 +29,7 @@ class _PageContentState extends State<PageContent> {
   void getPost(var KEYS, var DATA)
   {
     postsList.clear();
+    postsList2.clear();
 
     for(var individualKey in KEYS)
     {
@@ -144,7 +145,7 @@ class _PageContentState extends State<PageContent> {
 
   @override
   Widget build(BuildContext context) {
-    if(widget.index == 1)
+    if(widget.index == 0)
     {
       return new Center
       (
@@ -167,7 +168,7 @@ class _PageContentState extends State<PageContent> {
       );
     }
 
-    else if(widget.index == 3)
+    else if(widget.index == 2)
     {
       return new Container
         (
@@ -188,8 +189,6 @@ class _PageContentState extends State<PageContent> {
           ),
         );
     }
-
-
 
     else
     {

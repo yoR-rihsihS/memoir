@@ -133,9 +133,9 @@ class _HomePage extends State<HomePage>
             setState(() => _currentIndex = index);
           },
           children: <Widget>[
-            PageContent(index: 1,),
+            PageContent(index: _currentIndex,),
             EditorPage(name: name, uId: uid, onPostUpload: postUpload,),
-            PageContent(index: 3,),
+            PageContent(index: _currentIndex,),
           ],
         ),
       ),
